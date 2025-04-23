@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Maze Game with Level Selector</title>
+</head>
+<body>
+    <div id="levelDisplay">Levels Completed: 0</div>
+    <label for="sizeSelector">Select Maze Size:</label>
+    <select id="sizeSelector">
+        <option value="5">5x5</option>
+        <option value="15">15x15</option>
+        <option value="25">25x25</option>
+    </select>
+    <canvas id="mazeCanvas" width="400" height="400"></canvas>
+    <script>
+        // Get the canvas and its 2D context
+        const canvas = document.getElementById('mazeCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Get the size selector and level display
+        const sizeSelector = document.getElementById('sizeSelector');
+        const levelDisplay = document.getElementById('levelDisplay');
+
+        // Maze size and cell size
+        let mazeSize = parseInt(sizeSelector.value); // Initial size from dropdown
+        let cellSize = 400 / mazeSize; // Canvas is 400x400, so cell size adjusts
+
+        // Player starting position (top-left)
+        let player = { row: 0, col: 0 };
+
+        // Level counter
+        let levelCount = 0;
+
+        // Initial maze array
+        let maze = [];
+
+        // Update the level display text
+        function updateLevelDisplay() {
+            levelDisplay.textContent = `Levels Completed: ${levelCount}`;
+        }
+
+        // Generate a random maze using recursive backtracking
+        function generateMaze() {
+            maze = Array(mazeSize).fill().map(() => Array(mazeSize).fill(1));
+            const directions = [[0, 2], [2, 0], [0, -2], [-2, 0]];
+
+            function shuffle(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            function carve(row, col) {
+                maze[row][col] = 0;
+                const dirs = shuffle([...directions]);
+                for (let [dr, dc] of dirs) {
+                    const newRow = row + dr;
+                    const newCol = col + dc;
+                    if (
+                        newRow >= 0 &&
+                        newRow < mazeSize &&
+                        newCol >= 0 &&
+                        newCol < mazeSize &&
+                        maze[newRow][newCol] === 1
+                    ) {
+                        const wallRow = row + dr / 2;
+                        const wallCol = col + dc / 2;
+                        if (
+                            wallRow >= 0 &&
+                            wallRow < mazeSize &&
+                            wallCol >= 0 &&
+                            wallCol < mazeSize
+                        ) {
+                            maze[wallRow][wallCol] = 0;
+                        }
+                        carve(newRow, newCol);
+                    }
+                }
+            }
+
+            carve(0, 0);
+            maze[0][0] = 0;
+            maze[mazeSize - 1][mazeSize - 1] = 0;
+        }
+
+        // Draw the maze (walls, paths, goal)
+        function drawMaze() {
+            for (let row = 0; row < mazeSize; row++) {
+                for (let col = 0; col < mazeSize; col++) {
+                    if (row === mazeSize - 1 && col === mazeSize - 1) {
+                        ctx.fillStyle = 'green'; // Goal
+                    } else if (maze[row][col] === 1) {
+                        ctx.fillStyle = 'black'; // Wall
+                    } else {
+                        ctx.fillStyle = 'white'; // Path
+                    }
+                    ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+                }
+            }
+        }
+
+        // Draw the player as a red circle
+        function drawPlayer() {
+            ctx.beginPath();
+            ctx.arc(
+                player.col * cellSize + cellSize / 2,
+                player.row * cellSize + cellSize / 2,
+                cellSize / 3,
+                0,
+                2 * Math.PI
+            );
+            ctx.fillStyle = 'red';
+            ctx.fill();
+        }
+
+        // Check if a move is valid
+        function isValidMove(row, col) {
+            return (
+                row >= 0 &&
+                row < mazeSize &&
+                col >= 0 &&
+                col < mazeSize &&
+                maze[row][col] === 0
+            );
+        }
+
+        // Redraw the entire game (without level counter on canvas)
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawMaze();
+            drawPlayer();
+        }
+
+        // Check for win condition
+        function checkWin() {
+            if (player.row === mazeSize - 1 && player.col === mazeSize - 1) {
+                levelCount++;
+                updateLevelDisplay(); // Update the HTML display
+                alert('You Win!');
+                generateMaze();
+                player.row = 0;
+                player.col = 0;
+                draw();
+            }
+        }
+
+        // Handle keyboard movement
+        window.addEventListener('keydown', (e) => {
+            if (e.key.startsWith('Arrow')) {
+                e.preventDefault();
+                let newRow = player.row;
+                let newCol = player.col;
+
+                if (e.key === 'ArrowUp') newRow--;
+                else if (e.key === 'ArrowDown') newRow++;
+                else if (e.key === 'ArrowLeft') newCol--;
+                else if (e.key === 'ArrowRight') newCol++;
+
+                if (isValidMove(newRow, newCol)) {
+                    player.row = newRow;
+                    player.col = newCol;
+                    draw();
+                    checkWin();
+                }
+            }
+        });
+
+        // Handle size selection
+        sizeSelector.addEventListener('change', () => {
+            mazeSize = parseInt(sizeSelector.value);
+            cellSize = 400 / mazeSize;
+            generateMaze();
+            player.row = 0;
+            player.col = 0;
+            draw();
+        });
+
+        // Initial setup
+        generateMaze();
+        draw();
+        updateLevelDisplay(); // Initial display of level count
+    </script>
+</body>
+</html>
