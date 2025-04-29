@@ -69,19 +69,24 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(3, 1fr);
-      width: 150px;
-      height: 150px;
+      width: 300px;
+      height: 300px;
+      gap: 10px;
     }
     .direction-buttons button {
       background: #333;
       color: #FFF;
-      border: 1px solid #FFF;
-      border-radius: 4px;
-      font-size: 20px;
+      border: 2px solid #FFF;
+      border-radius: 8px;
+      font-size: 40px;
       cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 20px;
     }
     .direction-buttons button:hover {
       background: #444;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
     }
     #up-btn { grid-row: 1; grid-column: 2; }
     #left-btn { grid-row: 2; grid-column: 1; }
