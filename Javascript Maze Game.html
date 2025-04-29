@@ -83,28 +83,19 @@
     .direction-buttons button:hover {
       background: #444;
     }
-    #up-btn {
-      grid-row: 1;
-      grid-column: 2;
-    }
-    #left-btn {
-      grid-row: 2;
-      grid-column: 1;
-    }
-    #right-btn {
-      grid-row: 2;
-      grid-column: 3;
-    }
-    #down-btn {
-      grid-row: 3;
-      grid-column: 2;
-    }
+    #up-btn { grid-row: 1; grid-column: 2; }
+    #left-btn { grid-row: 2; grid-column: 1; }
+    #right-btn { grid-row: 2; grid-column: 3; }
+    #down-btn { grid-row: 3; grid-column: 2; }
   </style>
 </head>
 <body>
   <div id="levelDisplay">Levels Completed: 0</div>
+  <button class="sun-button" onclick="window.location.href='index.html'">
+    <span class="sun-icon"></span>
+    Back to Starbase
+  </button>
   <canvas id="mazeCanvas" width="400" height="400"></canvas>
-  
   <div id="controls">
     <div class="size-control">
       <label for="sizeSelector">Select Maze Size:</label>
@@ -114,18 +105,12 @@
         <option value="25">25x25</option>
       </select>
     </div>
-    
     <div class="direction-buttons">
       <button id="up-btn">↑</button>
       <button id="left-btn">←</button>
       <button id="right-btn">→</button>
       <button id="down-btn">↓</button>
     </div>
-    
-    <button class="sun-button" onclick="window.location.href='index.html'">
-      <span class="sun-icon"></span>
-      Back to Starbase
-    </button>
   </div>
 
   <script>
@@ -167,19 +152,15 @@
           const newRow = row + dr;
           const newCol = col + dc;
           if (
-            newRow >= 0 &&
-            newRow < mazeSize &&
-            newCol >= 0 &&
-            newCol < mazeSize &&
+            newRow >= 0 && newRow < mazeSize &&
+            newCol >= 0 && newCol < mazeSize &&
             maze[newRow][newCol] === 1
           ) {
             const wallRow = row + dr / 2;
             const wallCol = col + dc / 2;
             if (
-              wallRow >= 0 &&
-              wallRow < mazeSize &&
-              wallCol >= 0 &&
-              wallCol < mazeSize
+              wallRow >= 0 && wallRow < mazeSize &&
+              wallCol >= 0 && wallCol < mazeSize
             ) {
               maze[wallRow][wallCol] = 0;
             }
@@ -208,7 +189,7 @@
       for (let row = 0; row < mazeSize; row++) {
         for (let col = 0; col < mazeSize; col++) {
           if (maze[row][col] === 1) {
-            ctx.fillStyle = '#2F4F4F'; // Dark slate gray for walls
+            ctx.fillStyle = '#2F4F4F';
             ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
           }
         }
@@ -229,7 +210,7 @@
     }
 
     function drawPlayer() {
-      ctx.fillStyle = '#FF4500'; // Orange red for spaceship
+      ctx.fillStyle = '#FF4500';
       ctx.beginPath();
       ctx.moveTo(player.col * cellSize + cellSize / 2, player.row * cellSize + cellSize / 4);
       ctx.lineTo(player.col * cellSize + cellSize / 4, player.row * cellSize + (3 * cellSize) / 4);
@@ -240,10 +221,8 @@
 
     function isValidMove(row, col) {
       return (
-        row >= 0 &&
-        row < mazeSize &&
-        col >= 0 &&
-        col < mazeSize &&
+        row >= 0 && row < mazeSize &&
+        col >= 0 && col < mazeSize &&
         maze[row][col] === 0
       );
     }
@@ -272,15 +251,10 @@
       let newRow = player.row;
       let newCol = player.col;
 
-      if (direction === 'up') {
-        newRow--;
-      } else if (direction === 'down') {
-        newRow++;
-      } else if (direction === 'left') {
-        newCol--;
-      } else if (direction === 'right') {
-        newCol++;
-      }
+      if (direction === 'up') newRow--;
+      else if (direction === 'down') newRow++;
+      else if (direction === 'left') newCol--;
+      else if (direction === 'right') newCol++;
 
       if (isValidMove(newRow, newCol)) {
         player.row = newRow;
@@ -293,15 +267,10 @@
     window.addEventListener('keydown', (e) => {
       if (e.key.startsWith('Arrow')) {
         e.preventDefault();
-        if (e.key === 'ArrowUp') {
-          movePlayer('up');
-        } else if (e.key === 'ArrowDown') {
-          movePlayer('down');
-        } else if (e.key === 'ArrowLeft') {
-          movePlayer('left');
-        } else if (e.key === 'ArrowRight') {
-          movePlayer('right');
-        }
+        if (e.key === 'ArrowUp') movePlayer('up');
+        else if (e.key === 'ArrowDown') movePlayer('down');
+        else if (e.key === 'ArrowLeft') movePlayer('left');
+        else if (e.key === 'ArrowRight') movePlayer('right');
       }
     });
 
