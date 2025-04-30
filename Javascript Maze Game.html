@@ -25,7 +25,7 @@
       gap: 15px;
       align-items: center;
     }
-    #levelDisplay, #timerDisplay {
+    #levelDisplay, #timerDisplay, #mazeSizeDisplay {
       font-size: 1.2em;
       color: #FFD700;
       text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
@@ -79,6 +79,7 @@
 <body>
   <div id="levelDisplay">Levels Completed: 0</div>
   <div id="timerDisplay">Time: 0m 0s</div>
+  <div id="mazeSizeDisplay">Maze Size: 5x5</div>
   <button class="sun-button" onclick="window.location.href='index.html'">
     <span class="sun-icon"></span>
     Back to Starbase
@@ -95,6 +96,7 @@
     const ctx = canvas.getContext('2d');
     const levelDisplay = document.getElementById('levelDisplay');
     const timerDisplay = document.getElementById('timerDisplay');
+    const mazeSizeDisplay = document.getElementById('mazeSizeDisplay');
     const joystick = document.getElementById('joystick');
     const joystickHandle = document.getElementById('joystick-handle');
   
@@ -116,6 +118,10 @@
   
     function updateLevelDisplay() {
       levelDisplay.textContent = `Levels Completed: ${levelCount}`;
+    }
+  
+    function updateMazeSizeDisplay() {
+      mazeSizeDisplay.textContent = `Maze Size: ${mazeSize}x${mazeSize}`;
     }
   
     function generateMaze() {
@@ -331,6 +337,7 @@
         mazeSize += 2;              // Increase maze size by 2
         cellSize = 400 / mazeSize;  // Update cell size
         generateMaze();
+        updateMazeSizeDisplay();    // Update maze size display
         player.row = 0;
         player.col = 0;
         rocketOffset = 0;
@@ -505,6 +512,7 @@
     });
   
     generateMaze();
+    updateMazeSizeDisplay();
     draw();
     updateLevelDisplay();
   </script>
