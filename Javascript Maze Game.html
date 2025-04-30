@@ -30,15 +30,6 @@
       color: #FFD700;
       text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
     }
-    #sizeSelector {
-      background: #333;
-      color: #FFF;
-      padding: 8px;
-      border: 1px solid #FFF;
-      border-radius: 4px;
-      font-family: 'Orbitron', sans-serif;
-      cursor: pointer;
-    }
     .sun-button {
       display: flex;
       align-items: center;
@@ -93,14 +84,6 @@
   </button>
   <canvas id="mazeCanvas" width="400" height="400"></canvas>
   <div id="controls">
-    <div class="size-control">
-      <label for="sizeSelector">Select Maze Size:</label>
-      <select id="sizeSelector">
-        <option value="5">5x5</option>
-        <option value="15">15x15</option>
-        <option value="25">25x25</option>
-      </select>
-    </div>
     <div id="joystick">
       <div id="joystick-handle"></div>
     </div>
@@ -109,13 +92,12 @@
   <script>
     const canvas = document.getElementById('mazeCanvas');
     const ctx = canvas.getContext('2d');
-    const sizeSelector = document.getElementById('sizeSelector');
     const levelDisplay = document.getElementById('levelDisplay');
     const joystick = document.getElementById('joystick');
     const joystickHandle = document.getElementById('joystick-handle');
   
-    let mazeSize = parseInt(sizeSelector.value);
-    let cellSize = 400 / mazeSize;
+    let mazeSize = 5;           // Start with 5x5 maze
+    let cellSize = 400 / mazeSize; // Initial cell size = 80
     let player = { row: 0, col: 0 };
     let levelCount = 0;
     let maze = [];
@@ -124,7 +106,6 @@
     let handleCenterX, handleCenterY;
     let currentDirection = null;
     let moveInterval = null;
-    // New variables for animation
     let rocketOffset = 0;
     let isAnimating = false;
   
@@ -199,7 +180,7 @@
       const goalRow = mazeSize - 1;
       const goalCol = mazeSize - 1;
       const x = goalCol * cellSize;
-      const y = goalRow * cellSize - rocketOffset; // Apply offset for animation
+      const y = goalRow * cellSize - rocketOffset;
       const cx = x + cellSize / 2;
       const bodyWidth = cellSize / 3;
       const bodyHeight = cellSize / 2;
@@ -226,7 +207,6 @@
       ctx.fillRect(cx - bodyWidth / 2, y + cellSize / 4 + bodyHeight, engineWidth, engineHeight);
       ctx.fillRect(cx + bodyWidth / 2 - engineWidth, y + cellSize / 4 + bodyHeight, engineWidth, engineHeight);
   
-      // Add exhaust effect during takeoff
       if (rocketOffset > 0) {
         ctx.fillStyle = 'orange';
         const exhaustHeight = cellSize / 5;
@@ -319,14 +299,14 @@
       drawBackground();
       drawMaze();
       drawGoal();
-      if (!isAnimating) drawPlayer(); // Only draw player if not animating
+      if (!isAnimating) drawPlayer();
     }
   
     function checkWin() {
       if (player.row === mazeSize - 1 && player.col === mazeSize - 1) {
         levelCount++;
         updateLevelDisplay();
-        clearInterval(moveInterval); // Stop any ongoing movement
+        clearInterval(moveInterval);
         isAnimating = true;
         rocketOffset = 0;
         requestAnimationFrame(animateRocket);
@@ -337,12 +317,14 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       drawBackground();
       drawMaze();
-      drawGoal(); // Rocket moves up due to rocketOffset
-      rocketOffset += 5; // Speed of takeoff
+      drawGoal();
+      rocketOffset += 5;
       if (rocketOffset <= 400) {
         requestAnimationFrame(animateRocket);
       } else {
         isAnimating = false;
+        mazeSize += 2;              // Increase maze size by 2
+        cellSize = 400 / mazeSize;  // Update cell size
         generateMaze();
         player.row = 0;
         player.col = 0;
@@ -352,7 +334,7 @@
     }
   
     function movePlayer(direction) {
-      if (isAnimating) return; // Prevent movement during animation
+      if (isAnimating) return;
       let newRow = player.row;
       let newCol = player.col;
   
@@ -369,7 +351,6 @@
       }
     }
   
-    // Joystick functionality
     function getTouchPos(e) {
       const rect = joystick.getBoundingClientRect();
       return {
@@ -423,7 +404,7 @@
     }
   
     joystick.addEventListener('touchstart', (e) => {
-      if (isAnimating) return; // Prevent joystick use during animation
+      if (isAnimating) return;
       e.preventDefault();
       isJoystickActive = true;
       const pos = getTouchPos(e);
@@ -451,7 +432,7 @@
     });
   
     joystick.addEventListener('mousedown', (e) => {
-      if (isAnimating) return; // Prevent joystick use during animation
+      if (isAnimating) return;
       isJoystickActive = true;
       const pos = getMousePos(e);
       moveJoystick(pos);
@@ -495,7 +476,7 @@
     window.addEventListener('resize', initJoystick);
   
     window.addEventListener('keydown', (e) => {
-      if (isAnimating) return; // Prevent key movement during animation
+      if (isAnimating) return;
       if (e.key.startsWith('Arrow')) {
         e.preventDefault();
         if (e.key === 'ArrowUp') movePlayer('up');
@@ -503,15 +484,6 @@
         else if (e.key === 'ArrowLeft') movePlayer('left');
         else if (e.key === 'ArrowRight') movePlayer('right');
       }
-    });
-  
-    sizeSelector.addEventListener('change', () => {
-      mazeSize = parseInt(sizeSelector.value);
-      cellSize = 400 / mazeSize;
-      generateMaze();
-      player.row = 0;
-      player.col = 0;
-      draw();
     });
   
     generateMaze();
