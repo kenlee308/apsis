@@ -113,7 +113,7 @@
     const levelDisplay = document.getElementById('levelDisplay');
     const joystick = document.getElementById('joystick');
     const joystickHandle = document.getElementById('joystick-handle');
-
+  
     let mazeSize = parseInt(sizeSelector.value);
     let cellSize = 400 / mazeSize;
     let player = { row: 0, col: 0 };
@@ -123,16 +123,19 @@
     let joystickCenterX, joystickCenterY;
     let handleCenterX, handleCenterY;
     let currentDirection = null;
-    let moveInterval = null; // Added to manage continuous movement
-
+    let moveInterval = null;
+    // New variables for animation
+    let rocketOffset = 0;
+    let isAnimating = false;
+  
     function updateLevelDisplay() {
       levelDisplay.textContent = `Levels Completed: ${levelCount}`;
     }
-
+  
     function generateMaze() {
       maze = Array(mazeSize).fill().map(() => Array(mazeSize).fill(1));
       const directions = [[0, 2], [2, 0], [0, -2], [-2, 0]];
-
+  
       function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -140,7 +143,7 @@
         }
         return array;
       }
-
+  
       function carve(row, col) {
         maze[row][col] = 0;
         const dirs = shuffle([...directions]);
@@ -164,12 +167,12 @@
           }
         }
       }
-
+  
       carve(0, 0);
       maze[0][0] = 0;
       maze[mazeSize - 1][mazeSize - 1] = 0;
     }
-
+  
     function drawBackground() {
       ctx.fillStyle = 'black';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -180,7 +183,7 @@
         ctx.fillRect(x, y, 2, 2);
       }
     }
-
+  
     function drawMaze() {
       for (let row = 0; row < mazeSize; row++) {
         for (let col = 0; col < mazeSize; col++) {
@@ -191,17 +194,17 @@
         }
       }
     }
-
+  
     function drawGoal() {
       const goalRow = mazeSize - 1;
       const goalCol = mazeSize - 1;
       const x = goalCol * cellSize;
-      const y = goalRow * cellSize;
+      const y = goalRow * cellSize - rocketOffset; // Apply offset for animation
       const cx = x + cellSize / 2;
       const bodyWidth = cellSize / 3;
       const bodyHeight = cellSize / 2;
       const triangleHeight = cellSize / 6;
-
+  
       ctx.fillStyle = 'silver';
       ctx.fillRect(cx - bodyWidth / 2, y + cellSize / 4, bodyWidth, bodyHeight);
       ctx.beginPath();
@@ -210,20 +213,28 @@
       ctx.lineTo(cx + bodyWidth / 2, y + cellSize / 4);
       ctx.closePath();
       ctx.fill();
-
+  
       ctx.fillStyle = 'blue';
       const windowRadius = cellSize / 10;
       ctx.beginPath();
       ctx.arc(cx, y + cellSize / 2, windowRadius, 0, 2 * Math.PI);
       ctx.fill();
-
+  
       ctx.fillStyle = 'gray';
       const engineWidth = bodyWidth / 3;
       const engineHeight = cellSize / 10;
       ctx.fillRect(cx - bodyWidth / 2, y + cellSize / 4 + bodyHeight, engineWidth, engineHeight);
       ctx.fillRect(cx + bodyWidth / 2 - engineWidth, y + cellSize / 4 + bodyHeight, engineWidth, engineHeight);
+  
+      // Add exhaust effect during takeoff
+      if (rocketOffset > 0) {
+        ctx.fillStyle = 'orange';
+        const exhaustHeight = cellSize / 5;
+        ctx.fillRect(cx - bodyWidth / 2, y + cellSize / 4 + bodyHeight + engineHeight, engineWidth, exhaustHeight);
+        ctx.fillRect(cx + bodyWidth / 2 - engineWidth, y + cellSize / 4 + bodyHeight + engineHeight, engineWidth, exhaustHeight);
+      }
     }
-
+  
     function drawPlayer() {
       const x = player.col * cellSize;
       const y = player.row * cellSize;
@@ -233,7 +244,7 @@
       const helmetRadius = scaledCellSize / 4;
       const bodyWidth = scaledCellSize / 2;
       const bodyHeight = scaledCellSize / 2;
-
+  
       const helmetGradient = ctx.createRadialGradient(cx, y + helmetRadius, 0, cx, y + helmetRadius, helmetRadius);
       helmetGradient.addColorStop(0, '#FFFFFF');
       helmetGradient.addColorStop(1, '#E0E0E0');
@@ -241,28 +252,28 @@
       ctx.beginPath();
       ctx.arc(cx, y + helmetRadius, helmetRadius, 0, 2 * Math.PI);
       ctx.fill();
-
+  
       ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
       ctx.beginPath();
       ctx.arc(cx - helmetRadius/3, y + helmetRadius/2, helmetRadius/4, 0, 2 * Math.PI);
       ctx.fill();
-
+  
       const visorGradient = ctx.createLinearGradient(cx - helmetRadius/2, y + helmetRadius, cx + helmetRadius/2, y + helmetRadius);
       visorGradient.addColorStop(0, '#1a1a1a');
       visorGradient.addColorStop(0.5, '#333333');
       visorGradient.addColorStop(1, '#1a1a1a');
       ctx.fillStyle = visorGradient;
       ctx.fillRect(cx - helmetRadius/2, y + helmetRadius, helmetRadius, helmetRadius/2);
-
+  
       const bodyGradient = ctx.createLinearGradient(cx - bodyWidth/2, y + 2 * helmetRadius, cx + bodyWidth/2, y + 2 * helmetRadius + bodyHeight);
       bodyGradient.addColorStop(0, '#FFFFFF');
       bodyGradient.addColorStop(1, '#E0E0E0');
       ctx.fillStyle = bodyGradient;
       ctx.fillRect(cx - bodyWidth/2, y + 2 * helmetRadius, bodyWidth, bodyHeight);
-
+  
       ctx.fillStyle = '#333333';
       ctx.fillRect(cx + bodyWidth/2 - bodyWidth/6, y + 2 * helmetRadius, bodyWidth/6, bodyHeight);
-
+  
       const armGradient = ctx.createLinearGradient(cx - bodyWidth/2, y + 2 * helmetRadius + bodyHeight/4, cx - bodyWidth/2 - scaledCellSize/4, y + 2 * helmetRadius + bodyHeight/4);
       armGradient.addColorStop(0, '#FFFFFF');
       armGradient.addColorStop(1, '#E0E0E0');
@@ -276,7 +287,7 @@
       ctx.moveTo(cx + bodyWidth/2, y + 2 * helmetRadius + bodyHeight/4);
       ctx.lineTo(cx + bodyWidth/2 + scaledCellSize/4, y + 2 * helmetRadius + bodyHeight/4);
       ctx.stroke();
-
+  
       const legGradient = ctx.createLinearGradient(cx - bodyWidth/4, y + 2 * helmetRadius + bodyHeight, cx - bodyWidth/4, y + 2 * helmetRadius + bodyHeight + scaledCellSize/4);
       legGradient.addColorStop(0, '#FFFFFF');
       legGradient.addColorStop(1, '#E0E0E0');
@@ -289,12 +300,12 @@
       ctx.moveTo(cx + bodyWidth/4, y + 2 * helmetRadius + bodyHeight);
       ctx.lineTo(cx + bodyWidth/4, y + 2 * helmetRadius + bodyHeight + scaledCellSize/4);
       ctx.stroke();
-
+  
       ctx.fillStyle = '#333333';
       ctx.fillRect(cx - bodyWidth/4 - scaledCellSize/8, y + 2 * helmetRadius + bodyHeight + scaledCellSize/4, scaledCellSize/4, scaledCellSize/8);
       ctx.fillRect(cx + bodyWidth/4 - scaledCellSize/8, y + 2 * helmetRadius + bodyHeight + scaledCellSize/4, scaledCellSize/4, scaledCellSize/8);
     }
-
+  
     function isValidMove(row, col) {
       return (
         row >= 0 && row < mazeSize &&
@@ -302,36 +313,54 @@
         maze[row][col] === 0
       );
     }
-
+  
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       drawBackground();
       drawMaze();
       drawGoal();
-      drawPlayer();
+      if (!isAnimating) drawPlayer(); // Only draw player if not animating
     }
-
+  
     function checkWin() {
       if (player.row === mazeSize - 1 && player.col === mazeSize - 1) {
         levelCount++;
         updateLevelDisplay();
-        alert('You Win!');
+        clearInterval(moveInterval); // Stop any ongoing movement
+        isAnimating = true;
+        rocketOffset = 0;
+        requestAnimationFrame(animateRocket);
+      }
+    }
+  
+    function animateRocket() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBackground();
+      drawMaze();
+      drawGoal(); // Rocket moves up due to rocketOffset
+      rocketOffset += 5; // Speed of takeoff
+      if (rocketOffset <= 400) {
+        requestAnimationFrame(animateRocket);
+      } else {
+        isAnimating = false;
         generateMaze();
         player.row = 0;
         player.col = 0;
+        rocketOffset = 0;
         draw();
       }
     }
-
+  
     function movePlayer(direction) {
+      if (isAnimating) return; // Prevent movement during animation
       let newRow = player.row;
       let newCol = player.col;
-
+  
       if (direction === 'up') newRow--;
       else if (direction === 'down') newRow++;
       else if (direction === 'left') newCol--;
       else if (direction === 'right') newCol++;
-
+  
       if (isValidMove(newRow, newCol)) {
         player.row = newRow;
         player.col = newCol;
@@ -339,7 +368,7 @@
         checkWin();
       }
     }
-
+  
     // Joystick functionality
     function getTouchPos(e) {
       const rect = joystick.getBoundingClientRect();
@@ -348,7 +377,7 @@
         y: e.touches[0].clientY - rect.top
       };
     }
-
+  
     function getMousePos(e) {
       const rect = joystick.getBoundingClientRect();
       return {
@@ -356,14 +385,14 @@
         y: e.clientY - rect.top
       };
     }
-
+  
     function moveJoystick(pos) {
       const dx = pos.x - joystickCenterX;
       const dy = pos.y - joystickCenterY;
       const distance = Math.sqrt(dx * dx + dy * dy);
       const maxDistance = 70;
-      const threshold = 10; // Distance threshold to stop movement near center
-
+      const threshold = 10;
+  
       if (distance > maxDistance) {
         const angle = Math.atan2(dy, dx);
         handleCenterX = joystickCenterX + maxDistance * Math.cos(angle);
@@ -372,12 +401,12 @@
         handleCenterX = pos.x;
         handleCenterY = pos.y;
       }
-
+  
       joystickHandle.style.left = `${handleCenterX - 30}px`;
       joystickHandle.style.top = `${handleCenterY - 30}px`;
-
+  
       if (distance < threshold) {
-        currentDirection = null; // Stop movement when near center
+        currentDirection = null;
       } else {
         const angle = Math.atan2(dy, dx) * (180 / Math.PI);
         if (angle > -45 && angle <= 45) currentDirection = 'right';
@@ -386,14 +415,15 @@
         else currentDirection = 'left';
       }
     }
-
+  
     function resetJoystick() {
       joystickHandle.style.left = '70px';
       joystickHandle.style.top = '70px';
       currentDirection = null;
     }
-
+  
     joystick.addEventListener('touchstart', (e) => {
+      if (isAnimating) return; // Prevent joystick use during animation
       e.preventDefault();
       isJoystickActive = true;
       const pos = getTouchPos(e);
@@ -402,9 +432,9 @@
         if (currentDirection) {
           movePlayer(currentDirection);
         }
-      }, 200); // Move every 200ms
+      }, 200);
     });
-
+  
     joystick.addEventListener('touchmove', (e) => {
       e.preventDefault();
       if (isJoystickActive) {
@@ -412,15 +442,16 @@
         moveJoystick(pos);
       }
     });
-
+  
     joystick.addEventListener('touchend', (e) => {
       e.preventDefault();
       isJoystickActive = false;
       clearInterval(moveInterval);
       resetJoystick();
     });
-
+  
     joystick.addEventListener('mousedown', (e) => {
+      if (isAnimating) return; // Prevent joystick use during animation
       isJoystickActive = true;
       const pos = getMousePos(e);
       moveJoystick(pos);
@@ -428,22 +459,22 @@
         if (currentDirection) {
           movePlayer(currentDirection);
         }
-      }, 200); // Move every 200ms
+      }, 200);
     });
-
+  
     joystick.addEventListener('mousemove', (e) => {
       if (isJoystickActive) {
         const pos = getMousePos(e);
         moveJoystick(pos);
       }
     });
-
+  
     joystick.addEventListener('mouseup', (e) => {
       isJoystickActive = false;
       clearInterval(moveInterval);
       resetJoystick();
     });
-
+  
     joystick.addEventListener('mouseleave', (e) => {
       if (isJoystickActive) {
         isJoystickActive = false;
@@ -451,7 +482,7 @@
         resetJoystick();
       }
     });
-
+  
     function initJoystick() {
       const rect = joystick.getBoundingClientRect();
       joystickCenterX = rect.width / 2;
@@ -459,11 +490,12 @@
       handleCenterX = joystickCenterX;
       handleCenterY = joystickCenterY;
     }
-
+  
     window.addEventListener('load', initJoystick);
     window.addEventListener('resize', initJoystick);
-
+  
     window.addEventListener('keydown', (e) => {
+      if (isAnimating) return; // Prevent key movement during animation
       if (e.key.startsWith('Arrow')) {
         e.preventDefault();
         if (e.key === 'ArrowUp') movePlayer('up');
@@ -472,7 +504,7 @@
         else if (e.key === 'ArrowRight') movePlayer('right');
       }
     });
-
+  
     sizeSelector.addEventListener('change', () => {
       mazeSize = parseInt(sizeSelector.value);
       cellSize = 400 / mazeSize;
@@ -481,7 +513,7 @@
       player.col = 0;
       draw();
     });
-
+  
     generateMaze();
     draw();
     updateLevelDisplay();
