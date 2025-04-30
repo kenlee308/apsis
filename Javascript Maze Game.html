@@ -123,6 +123,7 @@
     let joystickCenterX, joystickCenterY;
     let handleCenterX, handleCenterY;
     let currentDirection = null;
+    let moveInterval = null; // Added to manage continuous movement
 
     function updateLevelDisplay() {
       levelDisplay.textContent = `Levels Completed: ${levelCount}`;
@@ -209,43 +210,89 @@
       ctx.lineTo(cx + bodyWidth / 2, y + cellSize / 4);
       ctx.closePath();
       ctx.fill();
+
+      ctx.fillStyle = 'blue';
+      const windowRadius = cellSize / 10;
+      ctx.beginPath();
+      ctx.arc(cx, y + cellSize / 2, windowRadius, 0, 2 * Math.PI);
+      ctx.fill();
+
+      ctx.fillStyle = 'gray';
+      const engineWidth = bodyWidth / 3;
+      const engineHeight = cellSize / 10;
+      ctx.fillRect(cx - bodyWidth / 2, y + cellSize / 4 + bodyHeight, engineWidth, engineHeight);
+      ctx.fillRect(cx + bodyWidth / 2 - engineWidth, y + cellSize / 4 + bodyHeight, engineWidth, engineHeight);
     }
 
     function drawPlayer() {
       const x = player.col * cellSize;
       const y = player.row * cellSize;
       const cx = x + cellSize / 2;
-      const part = cellSize / 4;
-      const headRadius = part / 2;
-      const bodyLength = 2 * part;
-      const legLength = part;
-      const armSpan = part;
+      const playerScale = 0.8;
+      const scaledCellSize = cellSize * playerScale;
+      const helmetRadius = scaledCellSize / 4;
+      const bodyWidth = scaledCellSize / 2;
+      const bodyHeight = scaledCellSize / 2;
 
-      ctx.strokeStyle = '#FF4500';
-      ctx.lineWidth = 2;
-
+      const helmetGradient = ctx.createRadialGradient(cx, y + helmetRadius, 0, cx, y + helmetRadius, helmetRadius);
+      helmetGradient.addColorStop(0, '#FFFFFF');
+      helmetGradient.addColorStop(1, '#E0E0E0');
+      ctx.fillStyle = helmetGradient;
       ctx.beginPath();
-      ctx.arc(cx, y + headRadius, headRadius, 0, 2 * Math.PI);
+      ctx.arc(cx, y + helmetRadius, helmetRadius, 0, 2 * Math.PI);
+      ctx.fill();
+
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+      ctx.beginPath();
+      ctx.arc(cx - helmetRadius/3, y + helmetRadius/2, helmetRadius/4, 0, 2 * Math.PI);
+      ctx.fill();
+
+      const visorGradient = ctx.createLinearGradient(cx - helmetRadius/2, y + helmetRadius, cx + helmetRadius/2, y + helmetRadius);
+      visorGradient.addColorStop(0, '#1a1a1a');
+      visorGradient.addColorStop(0.5, '#333333');
+      visorGradient.addColorStop(1, '#1a1a1a');
+      ctx.fillStyle = visorGradient;
+      ctx.fillRect(cx - helmetRadius/2, y + helmetRadius, helmetRadius, helmetRadius/2);
+
+      const bodyGradient = ctx.createLinearGradient(cx - bodyWidth/2, y + 2 * helmetRadius, cx + bodyWidth/2, y + 2 * helmetRadius + bodyHeight);
+      bodyGradient.addColorStop(0, '#FFFFFF');
+      bodyGradient.addColorStop(1, '#E0E0E0');
+      ctx.fillStyle = bodyGradient;
+      ctx.fillRect(cx - bodyWidth/2, y + 2 * helmetRadius, bodyWidth, bodyHeight);
+
+      ctx.fillStyle = '#333333';
+      ctx.fillRect(cx + bodyWidth/2 - bodyWidth/6, y + 2 * helmetRadius, bodyWidth/6, bodyHeight);
+
+      const armGradient = ctx.createLinearGradient(cx - bodyWidth/2, y + 2 * helmetRadius + bodyHeight/4, cx - bodyWidth/2 - scaledCellSize/4, y + 2 * helmetRadius + bodyHeight/4);
+      armGradient.addColorStop(0, '#FFFFFF');
+      armGradient.addColorStop(1, '#E0E0E0');
+      ctx.strokeStyle = armGradient;
+      ctx.lineWidth = scaledCellSize/8;
+      ctx.beginPath();
+      ctx.moveTo(cx - bodyWidth/2, y + 2 * helmetRadius + bodyHeight/4);
+      ctx.lineTo(cx - bodyWidth/2 - scaledCellSize/4, y + 2 * helmetRadius + bodyHeight/4);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(cx + bodyWidth/2, y + 2 * helmetRadius + bodyHeight/4);
+      ctx.lineTo(cx + bodyWidth/2 + scaledCellSize/4, y + 2 * helmetRadius + bodyHeight/4);
       ctx.stroke();
 
+      const legGradient = ctx.createLinearGradient(cx - bodyWidth/4, y + 2 * helmetRadius + bodyHeight, cx - bodyWidth/4, y + 2 * helmetRadius + bodyHeight + scaledCellSize/4);
+      legGradient.addColorStop(0, '#FFFFFF');
+      legGradient.addColorStop(1, '#E0E0E0');
+      ctx.strokeStyle = legGradient;
       ctx.beginPath();
-      ctx.moveTo(cx, y + 2 * headRadius);
-      ctx.lineTo(cx, y + 2 * headRadius + bodyLength);
+      ctx.moveTo(cx - bodyWidth/4, y + 2 * helmetRadius + bodyHeight);
+      ctx.lineTo(cx - bodyWidth/4, y + 2 * helmetRadius + bodyHeight + scaledCellSize/4);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(cx + bodyWidth/4, y + 2 * helmetRadius + bodyHeight);
+      ctx.lineTo(cx + bodyWidth/4, y + 2 * helmetRadius + bodyHeight + scaledCellSize/4);
       ctx.stroke();
 
-      const armY = y + 2 * headRadius + bodyLength / 2;
-      ctx.beginPath();
-      ctx.moveTo(cx - armSpan, armY);
-      ctx.lineTo(cx + armSpan, armY);
-      ctx.stroke();
-
-      const legStartY = y + 2 * headRadius + bodyLength;
-      ctx.beginPath();
-      ctx.moveTo(cx, legStartY);
-      ctx.lineTo(cx - legLength / 2, legStartY + legLength);
-      ctx.moveTo(cx, legStartY);
-      ctx.lineTo(cx + legLength / 2, legStartY + legLength);
-      ctx.stroke();
+      ctx.fillStyle = '#333333';
+      ctx.fillRect(cx - bodyWidth/4 - scaledCellSize/8, y + 2 * helmetRadius + bodyHeight + scaledCellSize/4, scaledCellSize/4, scaledCellSize/8);
+      ctx.fillRect(cx + bodyWidth/4 - scaledCellSize/8, y + 2 * helmetRadius + bodyHeight + scaledCellSize/4, scaledCellSize/4, scaledCellSize/8);
     }
 
     function isValidMove(row, col) {
@@ -315,6 +362,7 @@
       const dy = pos.y - joystickCenterY;
       const distance = Math.sqrt(dx * dx + dy * dy);
       const maxDistance = 70;
+      const threshold = 10; // Distance threshold to stop movement near center
 
       if (distance > maxDistance) {
         const angle = Math.atan2(dy, dx);
@@ -328,16 +376,14 @@
       joystickHandle.style.left = `${handleCenterX - 30}px`;
       joystickHandle.style.top = `${handleCenterY - 30}px`;
 
-      const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-      let direction = null;
-      if (angle > -45 && angle <= 45) direction = 'right';
-      else if (angle > 45 && angle <= 135) direction = 'down';
-      else if (angle > -135 && angle <= -45) direction = 'up';
-      else direction = 'left';
-
-      if (direction !== currentDirection) {
-        currentDirection = direction;
-        movePlayer(direction);
+      if (distance < threshold) {
+        currentDirection = null; // Stop movement when near center
+      } else {
+        const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+        if (angle > -45 && angle <= 45) currentDirection = 'right';
+        else if (angle > 45 && angle <= 135) currentDirection = 'down';
+        else if (angle > -135 && angle <= -45) currentDirection = 'up';
+        else currentDirection = 'left';
       }
     }
 
@@ -352,6 +398,11 @@
       isJoystickActive = true;
       const pos = getTouchPos(e);
       moveJoystick(pos);
+      moveInterval = setInterval(() => {
+        if (currentDirection) {
+          movePlayer(currentDirection);
+        }
+      }, 200); // Move every 200ms
     });
 
     joystick.addEventListener('touchmove', (e) => {
@@ -365,6 +416,7 @@
     joystick.addEventListener('touchend', (e) => {
       e.preventDefault();
       isJoystickActive = false;
+      clearInterval(moveInterval);
       resetJoystick();
     });
 
@@ -372,6 +424,11 @@
       isJoystickActive = true;
       const pos = getMousePos(e);
       moveJoystick(pos);
+      moveInterval = setInterval(() => {
+        if (currentDirection) {
+          movePlayer(currentDirection);
+        }
+      }, 200); // Move every 200ms
     });
 
     joystick.addEventListener('mousemove', (e) => {
@@ -383,12 +440,14 @@
 
     joystick.addEventListener('mouseup', (e) => {
       isJoystickActive = false;
+      clearInterval(moveInterval);
       resetJoystick();
     });
 
     joystick.addEventListener('mouseleave', (e) => {
       if (isJoystickActive) {
         isJoystickActive = false;
+        clearInterval(moveInterval);
         resetJoystick();
       }
     });
