@@ -65,33 +65,24 @@
       margin-right: 10px;
       box-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
     }
-    .direction-buttons {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(3, 1fr);
-      width: 300px;
-      height: 300px;
-      gap: 10px;
-    }
-    .direction-buttons button {
+    #joystick {
+      position: relative;
+      width: 200px;
+      height: 200px;
       background: #333;
-      color: #FFF;
-      border: 2px solid #FFF;
-      border-radius: 8px;
-      font-size: 40px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      padding: 20px;
+      border-radius: 50%;
+      touch-action: none;
     }
-    .direction-buttons button:hover {
-      background: #444;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-      transform: scale(1.1);
+    #joystick-handle {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: #FFF;
+      border-radius: 50%;
+      top: 70px;
+      left: 70px;
+      pointer-events: none;
     }
-    #up-btn { grid-row: 1; grid-column: 2; }
-    #left-btn { grid-row: 2; grid-column: 1; }
-    #right-btn { grid-row: 2; grid-column: 3; }
-    #down-btn { grid-row: 3; grid-column: 2; }
   </style>
 </head>
 <body>
@@ -110,11 +101,8 @@
         <option value="25">25x25</option>
       </select>
     </div>
-    <div class="direction-buttons">
-      <button id="up-btn">↑</button>
-      <button id="left-btn">←</button>
-      <button id="right-btn">→</button>
-      <button id="down-btn">↓</button>
+    <div id="joystick">
+      <div id="joystick-handle"></div>
     </div>
   </div>
 
@@ -123,16 +111,18 @@
     const ctx = canvas.getContext('2d');
     const sizeSelector = document.getElementById('sizeSelector');
     const levelDisplay = document.getElementById('levelDisplay');
-    const upBtn = document.getElementById('up-btn');
-    const downBtn = document.getElementById('down-btn');
-    const leftBtn = document.getElementById('left-btn');
-    const rightBtn = document.getElementById('right-btn');
+    const joystick = document.getElementById('joystick');
+    const joystickHandle = document.getElementById('joystick-handle');
 
     let mazeSize = parseInt(sizeSelector.value);
     let cellSize = 400 / mazeSize;
     let player = { row: 0, col: 0 };
     let levelCount = 0;
     let maze = [];
+    let isJoystickActive = false;
+    let joystickCenterX, joystickCenterY;
+    let handleCenterX, handleCenterY;
+    let currentDirection = null;
 
     function updateLevelDisplay() {
       levelDisplay.textContent = `Levels Completed: ${levelCount}`;
@@ -202,26 +192,60 @@
     }
 
     function drawGoal() {
-      ctx.fillStyle = 'yellow';
+      const goalRow = mazeSize - 1;
+      const goalCol = mazeSize - 1;
+      const x = goalCol * cellSize;
+      const y = goalRow * cellSize;
+      const cx = x + cellSize / 2;
+      const bodyWidth = cellSize / 3;
+      const bodyHeight = cellSize / 2;
+      const triangleHeight = cellSize / 6;
+
+      ctx.fillStyle = 'silver';
+      ctx.fillRect(cx - bodyWidth / 2, y + cellSize / 4, bodyWidth, bodyHeight);
       ctx.beginPath();
-      ctx.arc(
-        (mazeSize - 1) * cellSize + cellSize / 2,
-        (mazeSize - 1) * cellSize + cellSize / 2,
-        cellSize / 3,
-        0,
-        2 * Math.PI
-      );
+      ctx.moveTo(cx, y + cellSize / 4 - triangleHeight);
+      ctx.lineTo(cx - bodyWidth / 2, y + cellSize / 4);
+      ctx.lineTo(cx + bodyWidth / 2, y + cellSize / 4);
+      ctx.closePath();
       ctx.fill();
     }
 
     function drawPlayer() {
-      ctx.fillStyle = '#FF4500';
+      const x = player.col * cellSize;
+      const y = player.row * cellSize;
+      const cx = x + cellSize / 2;
+      const part = cellSize / 4;
+      const headRadius = part / 2;
+      const bodyLength = 2 * part;
+      const legLength = part;
+      const armSpan = part;
+
+      ctx.strokeStyle = '#FF4500';
+      ctx.lineWidth = 2;
+
       ctx.beginPath();
-      ctx.moveTo(player.col * cellSize + cellSize / 2, player.row * cellSize + cellSize / 4);
-      ctx.lineTo(player.col * cellSize + cellSize / 4, player.row * cellSize + (3 * cellSize) / 4);
-      ctx.lineTo(player.col * cellSize + (3 * cellSize) / 4, player.row * cellSize + (3 * cellSize) / 4);
-      ctx.closePath();
-      ctx.fill();
+      ctx.arc(cx, y + headRadius, headRadius, 0, 2 * Math.PI);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(cx, y + 2 * headRadius);
+      ctx.lineTo(cx, y + 2 * headRadius + bodyLength);
+      ctx.stroke();
+
+      const armY = y + 2 * headRadius + bodyLength / 2;
+      ctx.beginPath();
+      ctx.moveTo(cx - armSpan, armY);
+      ctx.lineTo(cx + armSpan, armY);
+      ctx.stroke();
+
+      const legStartY = y + 2 * headRadius + bodyLength;
+      ctx.beginPath();
+      ctx.moveTo(cx, legStartY);
+      ctx.lineTo(cx - legLength / 2, legStartY + legLength);
+      ctx.moveTo(cx, legStartY);
+      ctx.lineTo(cx + legLength / 2, legStartY + legLength);
+      ctx.stroke();
     }
 
     function isValidMove(row, col) {
@@ -269,6 +293,117 @@
       }
     }
 
+    // Joystick functionality
+    function getTouchPos(e) {
+      const rect = joystick.getBoundingClientRect();
+      return {
+        x: e.touches[0].clientX - rect.left,
+        y: e.touches[0].clientY - rect.top
+      };
+    }
+
+    function getMousePos(e) {
+      const rect = joystick.getBoundingClientRect();
+      return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+    }
+
+    function moveJoystick(pos) {
+      const dx = pos.x - joystickCenterX;
+      const dy = pos.y - joystickCenterY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const maxDistance = 70;
+
+      if (distance > maxDistance) {
+        const angle = Math.atan2(dy, dx);
+        handleCenterX = joystickCenterX + maxDistance * Math.cos(angle);
+        handleCenterY = joystickCenterY + maxDistance * Math.sin(angle);
+      } else {
+        handleCenterX = pos.x;
+        handleCenterY = pos.y;
+      }
+
+      joystickHandle.style.left = `${handleCenterX - 30}px`;
+      joystickHandle.style.top = `${handleCenterY - 30}px`;
+
+      const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+      let direction = null;
+      if (angle > -45 && angle <= 45) direction = 'right';
+      else if (angle > 45 && angle <= 135) direction = 'down';
+      else if (angle > -135 && angle <= -45) direction = 'up';
+      else direction = 'left';
+
+      if (direction !== currentDirection) {
+        currentDirection = direction;
+        movePlayer(direction);
+      }
+    }
+
+    function resetJoystick() {
+      joystickHandle.style.left = '70px';
+      joystickHandle.style.top = '70px';
+      currentDirection = null;
+    }
+
+    joystick.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      isJoystickActive = true;
+      const pos = getTouchPos(e);
+      moveJoystick(pos);
+    });
+
+    joystick.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      if (isJoystickActive) {
+        const pos = getTouchPos(e);
+        moveJoystick(pos);
+      }
+    });
+
+    joystick.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      isJoystickActive = false;
+      resetJoystick();
+    });
+
+    joystick.addEventListener('mousedown', (e) => {
+      isJoystickActive = true;
+      const pos = getMousePos(e);
+      moveJoystick(pos);
+    });
+
+    joystick.addEventListener('mousemove', (e) => {
+      if (isJoystickActive) {
+        const pos = getMousePos(e);
+        moveJoystick(pos);
+      }
+    });
+
+    joystick.addEventListener('mouseup', (e) => {
+      isJoystickActive = false;
+      resetJoystick();
+    });
+
+    joystick.addEventListener('mouseleave', (e) => {
+      if (isJoystickActive) {
+        isJoystickActive = false;
+        resetJoystick();
+      }
+    });
+
+    function initJoystick() {
+      const rect = joystick.getBoundingClientRect();
+      joystickCenterX = rect.width / 2;
+      joystickCenterY = rect.height / 2;
+      handleCenterX = joystickCenterX;
+      handleCenterY = joystickCenterY;
+    }
+
+    window.addEventListener('load', initJoystick);
+    window.addEventListener('resize', initJoystick);
+
     window.addEventListener('keydown', (e) => {
       if (e.key.startsWith('Arrow')) {
         e.preventDefault();
@@ -278,11 +413,6 @@
         else if (e.key === 'ArrowRight') movePlayer('right');
       }
     });
-
-    upBtn.addEventListener('click', () => movePlayer('up'));
-    downBtn.addEventListener('click', () => movePlayer('down'));
-    leftBtn.addEventListener('click', () => movePlayer('left'));
-    rightBtn.addEventListener('click', () => movePlayer('right'));
 
     sizeSelector.addEventListener('change', () => {
       mazeSize = parseInt(sizeSelector.value);
