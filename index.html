@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Apsis Inc. - Solar System Portfolio</title>
@@ -39,7 +39,6 @@
             height: 800px;
         }
 
-        /* Create stars in the background */
         .solar-system::before {
             content: '';
             position: absolute;
@@ -78,7 +77,7 @@
             transform: translate(-50%, -50%) scale(1.1);
         }
 
-        .orbit-1, .orbit-2 {
+        .orbit-1, .orbit-2, .orbit-3 {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -97,7 +96,12 @@
             height: 600px;
         }
 
-        .planet-1, .planet-2 {
+        .orbit-3 {
+            width: 700px;
+            height: 700px;
+        }
+
+        .planet-1, .planet-2, .planet-3 {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -135,6 +139,18 @@
             text-shadow: 0 0 2px #000;
         }
 
+        .planet-3 {
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle at 30% 30%, #ff0000, #cc0000);
+            transform-origin: 350px 0;
+            animation: orbit-3 40s linear infinite;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            font-size: 0.8em;
+            color: #fff;
+            text-shadow: 0 0 2px #000;
+        }
+
         .planet-1:hover {
             transform: scale(1.2);
             box-shadow: 0 0 30px rgba(30, 144, 255, 0.8);
@@ -143,6 +159,11 @@
         .planet-2:hover {
             transform: scale(1.2);
             box-shadow: 0 0 30px rgba(153, 50, 204, 0.8);
+        }
+
+        .planet-3:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.8);
         }
 
         @keyframes orbit-1 {
@@ -160,6 +181,15 @@
             }
             to {
                 transform: rotate(480deg) translateX(300px) rotate(-480deg);
+            }
+        }
+
+        @keyframes orbit-3 {
+            from {
+                transform: rotate(240deg) translateX(350px) rotate(-240deg);
+            }
+            to {
+                transform: rotate(600deg) translateX(350px) rotate(-600deg);
             }
         }
 
@@ -187,9 +217,11 @@
     <div class="solar-system">
         <div class="orbit-1"></div>
         <div class="orbit-2"></div>
+        <div class="orbit-3"></div>
         <a href="index.html" class="sun" title="Home">Home</a>
         <a href="Javascript Maze Game.html" class="planet-1" title="Maze Game">Maze Game</a>
         <a href="https://medium.com/@apsis.g9" class="planet-2" title="Cosmic Blog">Cosmic Blog</a>
+        <a href="https://www.youtube.com/@kVarfpv" class="planet-3" title="YouTube Channel" target="_blank">YouTube Channel</a>
     </div>
 </body>
 </html>
