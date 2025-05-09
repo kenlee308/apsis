@@ -90,6 +90,10 @@
     <span class="sun-icon"></span>
     Back to Starbase
   </button>
+  <button class="sun-button" onclick="showPath()">
+    <span class="sun-icon"></span>
+    Show Path
+  </button>
   <canvas id="mazeCanvas" width="400" height="400"></canvas>
   <div id="controls">
     <div id="joystick">
@@ -124,6 +128,8 @@
     let timerStarted = false;
     let startTime;
     let timerInterval;
+    let showSolution = false;
+    let solutionPath = [];
   
     function updateLevelDisplay() {
       levelDisplay.textContent = `Levels Completed: ${levelCount}`;
@@ -172,6 +178,8 @@
       carve(0, 0);
       maze[0][0] = 0;
       maze[mazeSize - 1][mazeSize - 1] = 0;
+      showSolution = false;
+      solutionPath = [];
     }
   
     function drawBackground() {
@@ -314,10 +322,67 @@
       );
     }
   
+    function findShortestPath() {
+      const queue = [{ row: 0, col: 0, path: [{ row: 0, col: 0 }] }];
+      const visited = Array(mazeSize).fill().map(() => Array(mazeSize).fill(false));
+      visited[0][0] = true;
+      const directions = [
+        { dr: -1, dc: 0 }, // up
+        { dr: 1, dc: 0 },  // down
+        { dr: 0, dc: -1 }, // left
+        { dr: 0, dc: 1 }   // right
+      ];
+  
+      while (queue.length > 0) {
+        const { row, col, path } = queue.shift();
+        if (row === mazeSize - 1 && col === mazeSize - 1) {
+          return path;
+        }
+  
+        for (const { dr, dc } of directions) {
+          const newRow = row + dr;
+          const newCol = col + dc;
+          if (
+            newRow >= 0 && newRow < mazeSize &&
+            newCol >= 0 && newCol < mazeSize &&
+            maze[newRow][newCol] === 0 &&
+            !visited[newRow][newCol]
+          ) {
+            visited[newRow][newCol] = true;
+            queue.push({
+              row: newRow,
+              col: newCol,
+              path: [...path, { row: newRow, col: newCol }]
+            });
+          }
+        }
+      }
+      return [];
+    }
+  
+    function drawPath() {
+      if (!showSolution || solutionPath.length === 0) return;
+      ctx.strokeStyle = '#FFD700';
+      ctx.lineWidth = cellSize / 10;
+      ctx.beginPath();
+      for (let i = 0; i < solutionPath.length; i++) {
+        const { row, col } = solutionPath[i];
+        const x = col * cellSize + cellSize / 2;
+        const y = row * cellSize + cellSize / 2;
+        if (i === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+      }
+      ctx.stroke();
+    }
+  
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       drawBackground();
       drawMaze();
+      drawPath();
       drawGoal();
       if (!isAnimating) drawPlayer();
     }
@@ -329,6 +394,8 @@
         clearInterval(moveInterval);
         isAnimating = true;
         rocketOffset = 0;
+        showSolution = false;
+        solutionPath = [];
         requestAnimationFrame(animateRocket);
       }
     }
@@ -337,6 +404,7 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       drawBackground();
       drawMaze();
+      drawPath();
       drawGoal();
       rocketOffset += 5;
       if (rocketOffset <= 400) {
@@ -519,6 +587,15 @@
         else if (e.key === 'ArrowRight') movePlayer('right');
       }
     });
+  
+    function showPath() {
+      if (isAnimating) return;
+      showSolution = !showSolution;
+      if (showSolution && solutionPath.length === 0) {
+        solutionPath = findShortestPath();
+      }
+      draw();
+    }
   
     generateMaze();
     updateMazeSizeDisplay();
