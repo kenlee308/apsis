@@ -77,7 +77,7 @@
             transform: translate(-50%, -50%) scale(1.1);
         }
 
-        .orbit-1, .orbit-2, .orbit-3, .orbit-4 {
+        .orbit-1, .orbit-2, .orbit-3, .orbit-4, .orbit-5 {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -106,7 +106,12 @@
             height: 800px;
         }
 
-        .planet-1, .planet-2, .planet-3, .planet-4 {
+        .orbit-5 {
+            width: 900px;
+            height: 900px;
+        }
+
+        .planet-1, .planet-2, .planet-3, .planet-4, .planet-5 {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -168,6 +173,18 @@
             text-shadow: 0 0 2px #000;
         }
 
+        .planet-5 {
+            width: 90px;
+            height: 90px;
+            background: radial-gradient(circle at 30% 30%, #ff8c00, #ff4500);
+            transform-origin: 450px 0;
+            animation: orbit-5 60s linear infinite;
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
+            font-size: 1em;
+            color: #fff;
+            text-shadow: 0 0 2px #000;
+        }
+
         .planet-1:hover {
             transform: scale(1.2);
             box-shadow: 0 0 30px rgba(30, 144, 255, 0.8);
@@ -186,6 +203,11 @@
         .planet-4:hover {
             transform: scale(1.2);
             box-shadow: 0 0 30px rgba(0, 255, 0, 0.8);
+        }
+
+        .planet-5:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.8);
         }
 
         @keyframes orbit-1 {
@@ -224,6 +246,15 @@
             }
         }
 
+        @keyframes orbit-5 {
+            from {
+                transform: rotate(480deg) translateX(450px) rotate(-480deg);
+            }
+            to {
+                transform: rotate(840deg) translateX(450px) rotate(-840deg);
+            }
+        }
+
         @keyframes pulse {
             0% { box-shadow: 0 0 60px #ffa500, 0 0 100px rgba(255, 166, 0, 0.4); }
             50% { box-shadow: 0 0 80px #ffa500, 0 0 120px rgba(255, 166, 0, 0.6); }
@@ -250,11 +281,13 @@
         <div class="orbit-2"></div>
         <div class="orbit-3"></div>
         <div class="orbit-4"></div>
+        <div class="orbit-5"></div>
         <a href="index.html" class="sun" title="Home">Home</a>
         <a href="Javascript Maze Game.html" class="planet-1" title="AI Maze Game">AI Maze Game</a>
         <a href="https://medium.com/@apsis.g9" class="planet-2" title="Cosmic Blog">Cosmic Blog</a>
         <a href="https://www.youtube.com/@kVarfpv" class="planet-3" title="YouTube Channel" target="_blank">YouTube Channel</a>
         <a href="aboutme.html" class="planet-4" title="About Me">About Me</a>
+        <a href="projects.html" class="planet-5" title="Projects">Projects</a>
     </div>
 </body>
 </html>
