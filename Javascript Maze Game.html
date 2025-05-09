@@ -101,7 +101,7 @@
     </div>
   </div>
   <div id="gameDescription">
-    This maze game was created to showcase the power of AI, with every line of code generated entirely by artificial intelligence without a single line written by a human.
+    This maze game was created to showcase the power of AI, with every line of code generated entirely by artificial intelligence without a single line written by a human. It features an AI-driven pathfinding (A*) algorithm that can display and navigate the optimal path to the goal.
   </div>
 
   <script>
@@ -130,6 +130,7 @@
     let timerInterval;
     let showSolution = false;
     let solutionPath = [];
+    let isAutoMoving = false;
   
     function updateLevelDisplay() {
       levelDisplay.textContent = `Levels Completed: ${levelCount}`;
@@ -180,6 +181,7 @@
       maze[mazeSize - 1][mazeSize - 1] = 0;
       showSolution = false;
       solutionPath = [];
+      isAutoMoving = false;
     }
   
     function drawBackground() {
@@ -323,9 +325,16 @@
     }
   
     function findShortestPath() {
-      const queue = [{ row: 0, col: 0, path: [{ row: 0, col: 0 }] }];
-      const visited = Array(mazeSize).fill().map(() => Array(mazeSize).fill(false));
-      visited[0][0] = true;
+      // A* algorithm
+      const openSet = [{
+        row: 0,
+        col: 0,
+        g: 0,
+        h: manhattanDistance(0, 0),
+        f: manhattanDistance(0, 0),
+        path: [{ row: 0, col: 0 }]
+      }];
+      const closedSet = Array(mazeSize).fill().map(() => Array(mazeSize).fill(false));
       const directions = [
         { dr: -1, dc: 0 }, // up
         { dr: 1, dc: 0 },  // down
@@ -333,11 +342,26 @@
         { dr: 0, dc: 1 }   // right
       ];
   
-      while (queue.length > 0) {
-        const { row, col, path } = queue.shift();
+      function manhattanDistance(row, col) {
+        return Math.abs(row - (mazeSize - 1)) + Math.abs(col - (mazeSize - 1));
+      }
+  
+      while (openSet.length > 0) {
+        // Find node with lowest f score
+        let currentIdx = 0;
+        for (let i = 1; i < openSet.length; i++) {
+          if (openSet[i].f < openSet[currentIdx].f) {
+            currentIdx = i;
+          }
+        }
+        const current = openSet.splice(currentIdx, 1)[0];
+  
+        const { row, col, path } = current;
         if (row === mazeSize - 1 && col === mazeSize - 1) {
           return path;
         }
+  
+        closedSet[row][col] = true;
   
         for (const { dr, dc } of directions) {
           const newRow = row + dr;
@@ -346,14 +370,31 @@
             newRow >= 0 && newRow < mazeSize &&
             newCol >= 0 && newCol < mazeSize &&
             maze[newRow][newCol] === 0 &&
-            !visited[newRow][newCol]
+            !closedSet[newRow][newCol]
           ) {
-            visited[newRow][newCol] = true;
-            queue.push({
-              row: newRow,
-              col: newCol,
-              path: [...path, { row: newRow, col: newCol }]
-            });
+            const g = current.g + 1;
+            const h = manhattanDistance(newRow, newCol);
+            const f = g + h;
+  
+            // Check if this position is already in openSet with a lower f score
+            let inOpenSet = false;
+            for (const node of openSet) {
+              if (node.row === newRow && node.col === newCol && node.f <= f) {
+                inOpenSet = true;
+                break;
+              }
+            }
+  
+            if (!inOpenSet) {
+              openSet.push({
+                row: newRow,
+                col: newCol,
+                g: g,
+                h: h,
+                f: f,
+                path: [...path, { row: newRow, col: newCol }]
+              });
+            }
           }
         }
       }
@@ -396,6 +437,7 @@
         rocketOffset = 0;
         showSolution = false;
         solutionPath = [];
+        isAutoMoving = false;
         requestAnimationFrame(animateRocket);
       }
     }
@@ -423,7 +465,7 @@
     }
   
     function movePlayer(direction) {
-      if (isAnimating) return;
+      if (isAnimating || isAutoMoving) return;
       if (!timerStarted && levelCount === 0) {
         startTime = Date.now();
         timerStarted = true;
@@ -443,6 +485,39 @@
         draw();
         checkWin();
       }
+    }
+  
+    function autoMovePlayer() {
+      if (solutionPath.length < 2) return;
+      isAutoMoving = true;
+      let index = 1; // Start from second position (first is (0,0))
+  
+      function moveStep() {
+        if (index >= solutionPath.length || !isAutoMoving) {
+          isAutoMoving = false;
+          draw();
+          checkWin();
+          return;
+        }
+        const { row, col } = solutionPath[index];
+        player.row = row;
+        player.col = col;
+        draw();
+        checkWin();
+        if (player.row === mazeSize - 1 && player.col === mazeSize - 1) {
+          isAutoMoving = false;
+          return;
+        }
+        index++;
+        setTimeout(moveStep, 300); // Move every 300ms
+      }
+  
+      if (!timerStarted && levelCount === 0) {
+        startTime = Date.now();
+        timerStarted = true;
+        timerInterval = setInterval(updateTimer, 1000);
+      }
+      moveStep();
     }
   
     function updateTimer() {
@@ -470,6 +545,7 @@
     }
   
     function moveJoystick(pos) {
+      if (isAutoMoving) return;
       const dx = pos.x - joystickCenterX;
       const dy = pos.y - joystickCenterY;
       const distance = Math.sqrt(dx * dx + dy * dy);
@@ -506,7 +582,7 @@
     }
   
     joystick.addEventListener('touchstart', (e) => {
-      if (isAnimating) return;
+      if (isAnimating || isAutoMoving) return;
       e.preventDefault();
       isJoystickActive = true;
       const pos = getTouchPos(e);
@@ -534,7 +610,7 @@
     });
   
     joystick.addEventListener('mousedown', (e) => {
-      if (isAnimating) return;
+      if (isAnimating || isAutoMoving) return;
       isJoystickActive = true;
       const pos = getMousePos(e);
       moveJoystick(pos);
@@ -578,7 +654,7 @@
     window.addEventListener('resize', initJoystick);
   
     window.addEventListener('keydown', (e) => {
-      if (isAnimating) return;
+      if (isAnimating || isAutoMoving) return;
       if (e.key.startsWith('Arrow')) {
         e.preventDefault();
         if (e.key === 'ArrowUp') movePlayer('up');
@@ -589,10 +665,13 @@
     });
   
     function showPath() {
-      if (isAnimating) return;
-      showSolution = !showSolution;
-      if (showSolution && solutionPath.length === 0) {
+      if (isAnimating || isAutoMoving) return;
+      showSolution = true;
+      if (solutionPath.length === 0) {
         solutionPath = findShortestPath();
+      }
+      if (solutionPath.length > 0) {
+        autoMovePlayer();
       }
       draw();
     }
