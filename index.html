@@ -1,1 +1,254 @@
 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APSIS INC. - Solar System Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0d17;
+            --accent-color: #6366f1;
+            --sun-color: #f59e0b;
+            --sun-glow: #d97706;
+            --orbit-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: #ffffff;
+            overflow: hidden;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .glow {
+            text-shadow: 0 0 10px rgba(99, 102, 241, 0.5), 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Solar System Container */
+        .solar-system {
+            position: relative;
+            width: 1000px;
+            height: 1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* The Sun */
+        .sun {
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, var(--sun-color) 0%, var(--sun-glow) 70%, transparent 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            z-index: 100;
+            box-shadow: 0 0 60px var(--sun-glow);
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .sun:hover {
+            transform: scale(1.05);
+        }
+
+        /* Orbits */
+        .orbit {
+            position: absolute;
+            border: 1px dashed var(--orbit-color);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* Planet & Label Container */
+        .planet-wrapper {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+        }
+
+        .planet-body {
+            width: var(--size);
+            height: var(--size);
+            background: var(--color);
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--color);
+            position: absolute;
+            top: calc(var(--size) / -2);
+            left: calc(var(--size) / -2);
+            transition: transform 0.3s ease;
+        }
+
+        .planet-label {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            white-space: nowrap;
+            padding: 6px 12px;
+            background: rgba(11, 13, 23, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(4px);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #94a3b8;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            pointer-events: auto;
+        }
+
+        .planet-anchor:hover .planet-label {
+            color: white;
+            border-color: var(--accent-color);
+            background: rgba(99, 102, 241, 0.2);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .planet-anchor:hover .planet-body {
+            transform: scale(1.2);
+            box-shadow: 0 0 25px var(--color);
+        }
+
+        /* Animations */
+        @keyframes orbit-motion {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes label-counter-rotate {
+            from {
+                transform: translateY(-50%) rotate(0deg);
+            }
+
+            to {
+                transform: translateY(-50%) rotate(-360deg);
+            }
+        }
+
+        .orbit-container {
+            width: var(--radius);
+            height: var(--radius);
+            position: absolute;
+            animation: orbit-motion var(--period) linear infinite;
+        }
+
+        .planet-label-wrapper {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            animation: label-counter-rotate var(--period) linear infinite;
+        }
+
+        /* Stars Background */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("https://www.transparenttextures.com/patterns/stardust.png");
+            opacity: 0.3;
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stars"></div>
+
+    <div class="absolute top-10 left-10 z-20">
+        <h1 class="text-2xl font-bold glow">APSIS INC.</h1>
+        <p class="text-xs text-slate-500 uppercase tracking-widest mt-1">Human-AI Evolution</p>
+    </div>
+
+    <div class="solar-system">
+        <a href="index.html" class="sun glow">APSIS</a>
+
+        <!-- AI Maze Game -->
+        <div class="orbit" style="width: 300px; height: 300px;"></div>
+        <div class="orbit-container" style="--radius: 300px; --period: 20s;">
+            <a href="Javascript Maze Game.html" class="planet-anchor">
+                <div class="planet-label-wrapper">
+                    <div class="planet-body" style="--size: 10px; --color: #94a3b8;"></div>
+                    <span class="planet-label">AI Maze Game</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Cosmic Blog -->
+        <div class="orbit" style="width: 450px; height: 450px;"></div>
+        <div class="orbit-container" style="--radius: 450px; --period: 36.7s;">
+            <a href="https://medium.com/@apsis.g9" class="planet-anchor" target="_blank">
+                <div class="planet-label-wrapper">
+                    <div class="planet-body" style="--size: 14px; --color: #4f46e5;"></div>
+                    <span class="planet-label">Cosmic Blog</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Projects -->
+        <div class="orbit" style="width: 600px; height: 600px;"></div>
+        <div class="orbit-container" style="--radius: 600px; --period: 56.6s;">
+            <a href="projects.html" class="planet-anchor">
+                <div class="planet-label-wrapper">
+                    <div class="planet-body" style="--size: 18px; --color: #818cf8;"></div>
+                    <span class="planet-label">AI Literacy Projects</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- About Me -->
+        <div class="orbit" style="width: 750px; height: 750px;"></div>
+        <div class="orbit-container" style="--radius: 750px; --period: 79s;">
+            <a href="aboutme.html" class="planet-anchor">
+                <div class="planet-label-wrapper">
+                    <div class="planet-body" style="--size: 12px; --color: #6366f1;"></div>
+                    <span class="planet-label">The Founder</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- YouTube -->
+        <div class="orbit" style="width: 900px; height: 900px;"></div>
+        <div class="orbit-container" style="--radius: 900px; --period: 103.9s;">
+            <a href="https://www.youtube.com/@kVarfpv" class="planet-anchor" target="_blank">
+                <div class="planet-label-wrapper">
+                    <div class="planet-body" style="--size: 16px; --color: #a5b4fc;"></div>
+                    <span class="planet-label">Robotics / YouTube</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 text-center z-20">
+        <p class="text-slate-400 text-sm italic font-light">"Question Everything. Build the Future. Together."</p>
+    </div>
+</body>
+
+</html>
+Pressing key...Getting DOM...Stopping...
+
+Stop Agent
