@@ -59,11 +59,7 @@
             z-index: 100;
             box-shadow: 0 0 60px var(--sun-glow);
             text-decoration: none;
-            transition: transform 0.3s ease;
-        }
-
-        .sun:hover {
-            transform: scale(1.05);
+            cursor: default;
         }
 
         /* Orbits */
@@ -112,7 +108,6 @@
             color: #94a3b8;
             text-decoration: none;
             transition: all 0.3s ease;
-            pointer-events: auto;
         }
 
         .planet-anchor:hover .planet-label {
@@ -153,6 +148,12 @@
             height: var(--radius);
             position: absolute;
             animation: orbit-motion var(--period) linear infinite;
+            pointer-events: none;
+        }
+
+        .planet-anchor {
+            pointer-events: auto;
+            text-decoration: none;
         }
 
         .planet-label-wrapper {
@@ -160,6 +161,7 @@
             top: 0;
             left: 50%;
             animation: label-counter-rotate var(--period) linear infinite;
+            pointer-events: none;
         }
 
         /* Stars Background */
@@ -185,7 +187,7 @@
     </div>
 
     <div class="solar-system">
-        <a href="index.html" class="sun glow">APSIS</a>
+        <div class="sun glow">APSIS</div>
 
         <!-- AI Maze Game -->
         <div class="orbit" style="width: 300px; height: 300px;"></div>
