@@ -75,6 +75,42 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: transform 0.5s ease;
+        }
+
+        /* Responsive Scaling for Solar System */
+        @media (max-width: 1024px) {
+            .solar-system {
+                transform: scale(0.8);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .solar-system {
+                transform: scale(0.6);
+            }
+
+            .sun {
+                width: 100px;
+                height: 100px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .solar-system {
+                transform: scale(0.45);
+            }
+
+            .sun {
+                width: 90px;
+                height: 90px;
+            }
+
+            .planet-label {
+                font-size: 0.5rem;
+                padding: 3px 8px;
+            }
         }
 
         /* The Sun */
@@ -257,16 +293,38 @@
 
     <!-- Navigation Bar -->
     <nav
-        class="fixed top-0 left-0 w-full p-8 z-50 flex justify-between items-center max-w-[1400px] left-1/2 -translate-x-1/2">
-        <div>
-            <a href="index.html" class="text-2xl font-bold glow tracking-wider block">APSIS INC.</a>
-            <p class="text-[10px] text-slate-500 uppercase tracking-[0.3em] mt-1">Human-AI Evolution</p>
+        class="fixed top-0 left-0 w-full p-6 md:p-8 z-50 flex justify-between items-center max-w-[1400px] left-1/2 -translate-x-1/2">
+        <div class="relative z-[60]">
+            <a href="index.html" class="text-xl md:text-2xl font-bold glow tracking-wider block">APSIS INC.</a>
+            <p class="text-[8px] md:text-[10px] text-slate-500 uppercase tracking-[0.3em] mt-1">Human-AI Evolution</p>
         </div>
+
+        <!-- Desktop Navigation -->
         <div class="hidden md:flex space-x-10 text-slate-400 font-medium text-sm tracking-wide">
             <a href="index.html" class="text-white">Home</a>
             <a href="aboutme.html" class="hover:text-white transition">About</a>
             <a href="projects.html" class="hover:text-white transition">Projects</a>
             <a href="https://medium.com/@apsis.g9" target="_blank" class="hover:text-white transition">Blog</a>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden relative z-[60] p-2 text-slate-400 hover:text-white transition">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 6h16M4 12h16M4 18h16"></path>
+                <path id="close-icon" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu"
+            class="fixed inset-0 bg-[#0b0d17]/95 backdrop-blur-xl z-[55] flex flex-col items-center justify-center space-y-8 opacity-0 pointer-events-none transition-all duration-300 md:hidden">
+            <a href="index.html" class="text-2xl font-semibold text-white">Home</a>
+            <a href="aboutme.html" class="text-2xl font-semibold text-slate-400 hover:text-white">About</a>
+            <a href="projects.html" class="text-2xl font-semibold text-slate-400 hover:text-white">Projects</a>
+            <a href="https://medium.com/@apsis.g9" target="_blank"
+                class="text-2xl font-semibold text-slate-400 hover:text-white">Blog</a>
         </div>
     </nav>
 
@@ -357,6 +415,26 @@
 
     <script>
         const sun = document.querySelector('.sun');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+        const closeIcon = document.getElementById('close-icon');
+
+        // Mobile Menu Toggle
+        mobileMenuBtn.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.contains('opacity-100');
+            if (isOpen) {
+                mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+                mobileMenu.classList.remove('opacity-100');
+                menuIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            } else {
+                mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+                mobileMenu.classList.add('opacity-100');
+                menuIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+            }
+        });
 
         // Get all elements with orbital/billboarding animations
         const animatedElements = [
@@ -387,6 +465,8 @@
 
         // Touch Events
         sun.addEventListener('touchstart', (e) => {
+            // Only speed up if we're not interacting with the menu
+            if (e.target.closest('#mobile-menu-btn')) return;
             e.preventDefault();
             setSpeed(4);
         }, { passive: false });
