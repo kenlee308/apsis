@@ -298,7 +298,7 @@
     <!-- Navigation Bar -->
     <nav
         class="fixed top-0 left-0 w-full p-6 md:p-8 z-50 flex justify-between items-center max-w-[1400px] left-1/2 -translate-x-1/2">
-        <div class="relative z-[60]">
+        <div class="relative z-[60] order-3 md:order-1">
             <a href="index.html" class="text-xl md:text-2xl font-bold glow tracking-wider block">APSIS INC.</a>
             <p class="text-[8px] md:text-[10px] text-slate-500 uppercase tracking-[0.3em] mt-1">Human-AI Evolution</p>
         </div>
@@ -312,7 +312,8 @@
         </div>
 
         <!-- Mobile Menu Button -->
-        <button id="mobile-menu-btn" class="md:hidden relative z-[60] p-2 text-slate-400 hover:text-white transition">
+        <button id="mobile-menu-btn"
+            class="md:hidden relative z-[60] p-2 text-slate-400 hover:text-white transition order-1">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M4 6h16M4 12h16M4 18h16"></path>
