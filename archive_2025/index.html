@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Apsis Inc. - Solar System Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to bottom, #0a0a2a, #1a1a4a);
+            overflow: hidden;
+            font-family: 'Orbitron', sans-serif;
+            color: #E0FFFF; /* Changed from white to light cyan for high contrast */
+        }
+
+        .title {
+            position: absolute;
+            top: 5%;
+            font-size: 3em;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #E0FFFF; /* Changed from white to light cyan */
+            text-shadow: 0 0 10px rgba(224, 255, 255, 0.5),
+                         0 0 20px rgba(224, 255, 255, 0.3),
+                         0 0 30px rgba(224, 255, 255, 0.2);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .solar-system {
+            position: relative;
+            width: 800px;
+            height: 800px;
+        }
+
+        .solar-system::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(white 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.3;
+        }
+
+        .sun {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle at 30% 30%, #ffd700, #ffa500);
+            border-radius: 50%;
+            box-shadow: 0 0 60px #ffa500,
+                       0 0 100px rgba(255, 166, 0, 0.4),
+                       0 0 150px rgba(255, 166, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+            animation: pulse 4s ease-in-out infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #800000;
+            text-shadow: 0 0 2px #E0FFFF; /* Changed from white to light cyan */
+        }
+
+        .sun:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .orbit-1, .orbit-2, .orbit-3, .orbit-4, .orbit-5 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+        }
+
+        .orbit-1 {
+            width: 400px;
+            height: 400px;
+        }
+
+        .orbit-2 {
+            width: 600px;
+            height: 600px;
+        }
+
+        .orbit-3 {
+            width: 700px;
+            height: 700px;
+        }
+
+        .orbit-4 {
+            width: 800px;
+            height: 800px;
+        }
+
+        .orbit-5 {
+            width: 900px;
+            height: 900px;
+        }
+
+        .planet-1, .planet-2, .planet-3, .planet-4, .planet-5 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+
+        .planet-1 {
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle at 30% 30%, #4169e1, #1e90ff);
+            transform-origin: 200px 0;
+            animation: orbit-1 20s linear infinite;
+            box-shadow: 0 0 20px rgba(30, 144, 255, 0.5);
+            font-size: 0.6em;
+            color: #E0FFFF; /* Changed from white to light cyan */
+            text-shadow: 0 0 2px #000;
+        }
+
+        .planet-2 {
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle at 30% 30%, #9932cc, #800080);
+            transform-origin: 300px 0;
+            animation: orbit-2 30s linear infinite;
+            box-shadow: 0 0 20px rgba(153, 50, 204, 0.5);
+            font-size: 0.7em;
+            color: #E0FFFF; /* Changed from white to light cyan */
+            text-shadow: 0 0 2px #000;
+        }
+
+        .planet-3 {
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle at 30% 30%, #ff0000, #cc0000);
+            transform-origin: 350px 0;
+            animation: orbit-3 40s linear infinite;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            font-size: 0.8em;
+            color: #E0FFFF; /* Changed from white to light cyan */
+            text-shadow: 0 0 2px #000;
+        }
+
+        .planet-4 {
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle at 30% 30%, #00ff00, #008000);
+            transform-origin: 400px 0;
+            animation: orbit-4 50s linear infinite;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            font-size: 0.9em;
+            color: #E0FFFF; /* Changed from white to light cyan */
+            text-shadow: 0 0 2px #000;
+        }
+
+        .planet-5 {
+            width: 90px;
+            height: 90px;
+            background: radial-gradient(circle at 30% 30%, #ff8c00, #ff4500);
+            transform-origin: 450px 0;
+            animation: orbit-5 60s linear infinite;
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
+            font-size: 1em;
+            color: #E0FFFF; /* Changed from white to light cyan */
+            text-shadow: 0 0 2px #000;
+        }
+
+        .planet-1:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 30px rgba(30, 144, 255, 0.8);
+        }
+
+        .planet-2:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 30px rgba(153, 50, 204, 0.8);
+        }
+
+        .planet-3:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.8);
+        }
+
+        .planet-4:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.8);
+        }
+
+        .planet-5:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.8);
+        }
+
+        @keyframes orbit-1 {
+            from {
+                transform: rotate(0deg) translateX(200px) rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg) translateX(200px) rotate(-360deg);
+            }
+        }
+
+        @keyframes orbit-2 {
+            from {
+                transform: rotate(120deg) translateX(300px) rotate(-120deg);
+            }
+            to {
+                transform: rotate(480deg) translateX(300px) rotate(-480deg);
+            }
+        }
+
+        @keyframes orbit-3 {
+            from {
+                transform: rotate(240deg) translateX(350px) rotate(-240deg);
+            }
+            to {
+                transform: rotate(600deg) translateX(350px) rotate(-600deg);
+            }
+        }
+
+        @keyframes orbit-4 {
+            from {
+                transform: rotate(360deg) translateX(400px) rotate(-360deg);
+            }
+            to {
+                transform: rotate(720deg) translateX(400px) rotate(-720deg);
+            }
+        }
+
+        @keyframes orbit-5 {
+            from {
+                transform: rotate(480deg) translateX(450px) rotate(-480deg);
+            }
+            to {
+                transform: rotate(840deg) translateX(450px) rotate(-840deg);
+            }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 60px #ffa500, 0 0 100px rgba(255, 166, 0, 0.4); }
+            50% { box-shadow: 0 0 80px #ffa500, 0 0 120px rgba(255, 166, 0, 0.6); }
+            100% { box-shadow: 0 0 60px #ffa500, 0 0 100px rgba(255, 166, 0, 0.4); }
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px rgba(224, 255, 255, 0.5),
+                               0 0 20px rgba(224, 255, 255, 0.3); }
+            to { text-shadow: 0 0 15px rgba(224, 255, 255, 0.7),
+                             0 0 25px rgba(224, 255, 255, 0.5); }
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="title">Apsis Inc.</h1>
+    <div class="solar-system">
+        <div class="orbit-1"></div>
+        <div class="orbit-2"></div>
+        <div class="orbit-3"></div>
+        <div class="orbit-4"></div>
+        <div class="orbit-5"></div>
+        <a href="index.html" class="sun" title="Home">Home</a>
+        <a href="Javascript Maze Game.html" class="planet-1" title="AI Maze Game">AI Maze Game</a>
+        <a href="https://medium.com/@apsis.g9" class="planet-2" title="Cosmic Blog">Cosmic Blog</a>
+        <a href="https://www.youtube.com/@kVarfpv" class="planet-3" title="YouTube Channel" target="_blank">YouTube Channel</a>
+        <a href="aboutme.html" class="planet-4" title="About Me">About Me</a>
+        <a href="projects.html" class="planet-5" title="Projects">Projects</a>
+    </div>
+</body>
+</html>

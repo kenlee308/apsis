@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects - Apsis Inc.</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #000000;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+        }
+        .navbar {
+            background: rgba(0, 0, 0, 0.7);
+        }
+        .section-bg {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+        .glow-text {
+            text-shadow: 0 0 10px #4B0082, 0 0 20px #4B0082;
+        }
+        .hover-scale:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease-in-out;
+        }
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: url('https://kenlee308.github.io/apsis/assets/images/stars.png') repeat;
+            opacity: 0.8;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <nav class="navbar fixed top-0 w-full p-4 flex justify-between items-center z-10">
+        <a href="https://kenlee308.github.io/apsis/index.html" class="text-2xl font-bold glow-text">Apsis Inc.</a>
+        <div>
+            <a href="https://kenlee308.github.io/apsis/index.html" class="text-lg mx-4 hover:text-indigo-400">Home</a>
+            <a href="aboutme.html" class="text-lg mx-4 hover:text-indigo-400">About</a>
+            <a href="projects.html" class="text-lg mx-4 hover:text-indigo-400">Projects</a>
+            <a href="https://www.youtube.com/@kVarfpv" target="_blank" class="text-lg mx-4 hover:text-indigo-400">YouTube</a>
+            <a href="https://medium.com/@apsis.g9" target="_blank" class="text-lg mx-4 hover:text-indigo-400">Blog</a>
+            <a href="https://www.linkedin.com/in/kenny-lee-75841319" target="_blank" class="text-lg mx-4 hover:text-indigo-400">LinkedIn</a>
+        </div>
+    </nav>
+
+    <section class="min-h-screen flex items-center justify-center py-12">
+        <div class="container mx-auto px-4">
+            <div class="section-bg p-8 md:p-12 hover-scale">
+                <h1 class="text-4xl md:text-5xl font-bold glow-text mb-6 text-center">Projects</h1>
+                <p class="text-lg mb-4 text-center">Here are some of the projects I've been working on to explore AI, robotics, and human-machine collaboration. Each one is a step toward redefining what's possible.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold glow-text mb-6 text-center">AI Coding Projects</h2>
+            <div class="section-bg p-8 hover-scale">
+                <h3 class="text-2xl font-semibold mb-4">JavaScript Maze Game</h3>
+                <p class="text-lg mb-4">A dynamic maze game built with JavaScript, featuring procedurally generated mazes and player navigation using pathfinding algorithms. This project explores AI-driven game design and interactive user experiences.</p>
+                <a href="Javascript Maze Game.html" class="inline-block bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-800 transition">View Project</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-12 bg-black bg-opacity-50">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold glow-text mb-8">Let’s Build Something</h2>
+            <p class="text-lg mb-6">Got an idea for a project or want to collaborate on something innovative? I’m always up for exploring new possibilities in AI and robotics.</p>
+            <a href="mailto:apsis.g9@gmail.com" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full hover:bg-indigo-800 transition">Get in Touch</a>
+        </div>
+    </section>
+
+    <footer class="bg-black bg-opacity-70 py-6 text-center">
+        <p class="text-lg">© 2025 Apsis Inc. All rights reserved.</p>
+        <div class="mt-4">
+            <a href="https://www.youtube.com/@kVarfpv" target="_blank" class="mx-2 hover:text-indigo-400">YouTube</a>
+            <a href="https://medium.com/@apsis.g9" target="_blank" class="mx-2 hover:text-indigo-400">Blog</a>
+            <a href="https://www.linkedin.com/in/kenny-lee-75841319" target="_blank" class="mx-2 hover:text-indigo-400">LinkedIn</a>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const stars = document.querySelector('.stars');
+            stars.style.transform = `translateY(${window.scrollY * 0.5}px)`;
+        });
+    </script>
+</body>
+</html>

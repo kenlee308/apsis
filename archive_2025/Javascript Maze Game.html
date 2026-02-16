@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Maze Game with Level Selector</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background-color: #000;
+      color: #FFF;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+    }
+    canvas {
+      border: 2px solid #FFF;
+    }
+    #controls {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+    }
+    #levelDisplay, #timerDisplay, #mazeSizeDisplay {
+      font-size: 1.2em;
+      color: #FFD700;
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    }
+    .sun-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      background: #333;
+      color: #FFF;
+      border: 2px solid #FFA500;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-family: 'Orbitron', sans-serif;
+      transition: all 0.3s ease;
+    }
+    .sun-button:hover {
+      background: #444;
+      box-shadow: 0 0 15px rgba(255, 165, 0, 0.5);
+    }
+    .sun-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #FFD700, #FFA500);
+      margin-right: 10px;
+      box-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
+    }
+    #joystick {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      background: #333;
+      border-radius: 50%;
+      touch-action: none;
+    }
+    #joystick-handle {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: #FFF;
+      border-radius: 50%;
+      top: 70px;
+      left: 70px;
+      pointer-events: none;
+    }
+    #gameDescription {
+      font-size: 1em;
+      color: #FFD700;
+      max-width: 600px;
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <div id="levelDisplay">Levels Completed: 0</div>
+  <div id="timerDisplay">Time: 0m 0s</div>
+  <div id="mazeSizeDisplay">Maze Size: 5x5</div>
+  <button class="sun-button" onclick="window.location.href='index.html'">
+    <span class="sun-icon"></span>
+    Back to Starbase
+  </button>
+  <button class="sun-button" onclick="showPath()">
+    <span class="sun-icon"></span>
+    Show Path
+  </button>
+  <canvas id="mazeCanvas" width="400" height="400"></canvas>
+  <div id="controls">
+    <div id="joystick">
+      <div id="joystick-handle"></div>
+    </div>
+  </div>
+  <div id="gameDescription">
+    This maze game was created to showcase the power of AI, with every line of code generated entirely by artificial intelligence without a single line written by a human. It features an AI-driven pathfinding (A*) algorithm that can display and navigate the optimal path to the goal.
+  </div>
+
+  <script>
+    const canvas = document.getElementById('mazeCanvas');
+    const ctx = canvas.getContext('2d');
+    const levelDisplay = document.getElementById('levelDisplay');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const mazeSizeDisplay = document.getElementById('mazeSizeDisplay');
+    const joystick = document.getElementById('joystick');
+    const joystickHandle = document.getElementById('joystick-handle');
+  
+    let mazeSize = 5;           // Start with 5x5 maze
+    let cellSize = 400 / mazeSize; // Initial cell size = 80
+    let player = { row: 0, col: 0 };
+    let levelCount = 0;
+    let maze = [];
+    let isJoystickActive = false;
+    let joystickCenterX, joystickCenterY;
+    let handleCenterX, handleCenterY;
+    let currentDirection = null;
+    let moveInterval = null;
+    let rocketOffset = 0;
+    let isAnimating = false;
+    let timerStarted = false;
+    let startTime;
+    let timerInterval;
+    let showSolution = false;
+    let solutionPath = [];
+    let isAutoMoving = false;
+  
+    function updateLevelDisplay() {
+      levelDisplay.textContent = `Levels Completed: ${levelCount}`;
+    }
+  
+    function updateMazeSizeDisplay() {
+      mazeSizeDisplay.textContent = `Maze Size: ${mazeSize}x${mazeSize}`;
+    }
+  
+    function generateMaze() {
+      maze = Array(mazeSize).fill().map(() => Array(mazeSize).fill(1));
+      const directions = [[0, 2], [2, 0], [0, -2], [-2, 0]];
+  
+      function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+  
+      function carve(row, col) {
+        maze[row][col] = 0;
+        const dirs = shuffle([...directions]);
+        for (let [dr, dc] of dirs) {
+          const newRow = row + dr;
+          const newCol = col + dc;
+          if (
+            newRow >= 0 && newRow < mazeSize &&
+            newCol >= 0 && newCol < mazeSize &&
+            maze[newRow][newCol] === 1
+          ) {
+            const wallRow = row + dr / 2;
+            const wallCol = col + dc / 2;
+            if (
+              wallRow >= 0 && wallRow < mazeSize &&
+              wallCol >= 0 && wallCol < mazeSize
+            ) {
+              maze[wallRow][wallCol] = 0;
+            }
+            carve(newRow, newCol);
+          }
+        }
+      }
+  
+      carve(0, 0);
+      maze[0][0] = 0;
+      maze[mazeSize - 1][mazeSize - 1] = 0;
+      showSolution = false;
+      solutionPath = [];
+      isAutoMoving = false;
+    }
+  
+    function drawBackground() {
+      ctx.fillStyle = 'black';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'white';
+      for (let i = 0; i < 100; i++) {
+        let x = Math.random() * canvas.width;
+        let y = Math.random() * canvas.height;
+        ctx.fillRect(x, y, 2, 2);
+      }
+    }
+  
+    function drawMaze() {
+      for (let row = 0; row < mazeSize; row++) {
+        for (let col = 0; col < mazeSize; col++) {
+          if (maze[row][col] === 1) {
+            ctx.fillStyle = '#2F4F4F';
+            ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+          }
+        }
+      }
+    }
+  
+    function drawGoal() {
+      const goalRow = mazeSize - 1;
+      const goalCol = mazeSize - 1;
+      const x = goalCol * cellSize;
+      const y = goalRow * cellSize - rocketOffset;
+      const cx = x + cellSize / 2;
+      const bodyWidth = cellSize / 3;
+      const bodyHeight = cellSize / 2;
+      const triangleHeight = cellSize / 6;
+  
+      ctx.fillStyle = 'silver';
+      ctx.fillRect(cx - bodyWidth / 2, y + cellSize / 4, bodyWidth, bodyHeight);
+      ctx.beginPath();
+      ctx.moveTo(cx, y + cellSize / 4 - triangleHeight);
+      ctx.lineTo(cx - bodyWidth / 2, y + cellSize / 4);
+      ctx.lineTo(cx + bodyWidth / 2, y + cellSize / 4);
+      ctx.closePath();
+      ctx.fill();
+  
+      ctx.fillStyle = 'blue';
+      const windowRadius = cellSize / 10;
+      ctx.beginPath();
+      ctx.arc(cx, y + cellSize / 2, windowRadius, 0, 2 * Math.PI);
+      ctx.fill();
+  
+      ctx.fillStyle = 'gray';
+      const engineWidth = bodyWidth / 3;
+      const engineHeight = cellSize / 10;
+      ctx.fillRect(cx - bodyWidth / 2, y + cellSize / 4 + bodyHeight, engineWidth, engineHeight);
+      ctx.fillRect(cx + bodyWidth / 2 - engineWidth, y + cellSize / 4 + bodyHeight, engineWidth, engineHeight);
+  
+      if (rocketOffset > 0) {
+        ctx.fillStyle = 'orange';
+        const exhaustHeight = cellSize / 5;
+        ctx.fillRect(cx - bodyWidth / 2, y + cellSize / 4 + bodyHeight + engineHeight, engineWidth, exhaustHeight);
+        ctx.fillRect(cx + bodyWidth / 2 - engineWidth, y + cellSize / 4 + bodyHeight + engineHeight, engineWidth, exhaustHeight);
+      }
+    }
+  
+    function drawPlayer() {
+      const x = player.col * cellSize;
+      const y = player.row * cellSize;
+      const cx = x + cellSize / 2;
+      const playerScale = 0.8;
+      const scaledCellSize = cellSize * playerScale;
+      const helmetRadius = scaledCellSize / 4;
+      const bodyWidth = scaledCellSize / 2;
+      const bodyHeight = scaledCellSize / 2;
+  
+      const helmetGradient = ctx.createRadialGradient(cx, y + helmetRadius, 0, cx, y + helmetRadius, helmetRadius);
+      helmetGradient.addColorStop(0, '#FFFFFF');
+      helmetGradient.addColorStop(1, '#E0E0E0');
+      ctx.fillStyle = helmetGradient;
+      ctx.beginPath();
+      ctx.arc(cx, y + helmetRadius, helmetRadius, 0, 2 * Math.PI);
+      ctx.fill();
+  
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+      ctx.beginPath();
+      ctx.arc(cx - helmetRadius/3, y + helmetRadius/2, helmetRadius/4, 0, 2 * Math.PI);
+      ctx.fill();
+  
+      const visorGradient = ctx.createLinearGradient(cx - helmetRadius/2, y + helmetRadius, cx + helmetRadius/2, y + helmetRadius);
+      visorGradient.addColorStop(0, '#1a1a1a');
+      visorGradient.addColorStop(0.5, '#333333');
+      visorGradient.addColorStop(1, '#1a1a1a');
+      ctx.fillStyle = visorGradient;
+      ctx.fillRect(cx - helmetRadius/2, y + helmetRadius, helmetRadius, helmetRadius/2);
+  
+      const bodyGradient = ctx.createLinearGradient(cx - bodyWidth/2, y + 2 * helmetRadius, cx + bodyWidth/2, y + 2 * helmetRadius + bodyHeight);
+      bodyGradient.addColorStop(0, '#FFFFFF');
+      bodyGradient.addColorStop(1, '#E0E0E0');
+      ctx.fillStyle = bodyGradient;
+      ctx.fillRect(cx - bodyWidth/2, y + 2 * helmetRadius, bodyWidth, bodyHeight);
+  
+      ctx.fillStyle = '#333333';
+      ctx.fillRect(cx + bodyWidth/2 - bodyWidth/6, y + 2 * helmetRadius, bodyWidth/6, bodyHeight);
+  
+      const armGradient = ctx.createLinearGradient(cx - bodyWidth/2, y + 2 * helmetRadius + bodyHeight/4, cx - bodyWidth/2 - scaledCellSize/4, y + 2 * helmetRadius + bodyHeight/4);
+      armGradient.addColorStop(0, '#FFFFFF');
+      armGradient.addColorStop(1, '#E0E0E0');
+      ctx.strokeStyle = armGradient;
+      ctx.lineWidth = scaledCellSize/8;
+      ctx.beginPath();
+      ctx.moveTo(cx - bodyWidth/2, y + 2 * helmetRadius + bodyHeight/4);
+      ctx.lineTo(cx - bodyWidth/2 - scaledCellSize/4, y + 2 * helmetRadius + bodyHeight/4);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(cx + bodyWidth/2, y + 2 * helmetRadius + bodyHeight/4);
+      ctx.lineTo(cx + bodyWidth/2 + scaledCellSize/4, y + 2 * helmetRadius + bodyHeight/4);
+      ctx.stroke();
+  
+      const legGradient = ctx.createLinearGradient(cx - bodyWidth/4, y + 2 * helmetRadius + bodyHeight, cx - bodyWidth/4, y + 2 * helmetRadius + bodyHeight + scaledCellSize/4);
+      legGradient.addColorStop(0, '#FFFFFF');
+      legGradient.addColorStop(1, '#E0E0E0');
+      ctx.strokeStyle = legGradient;
+      ctx.beginPath();
+      ctx.moveTo(cx - bodyWidth/4, y + 2 * helmetRadius + bodyHeight);
+      ctx.lineTo(cx - bodyWidth/4, y + 2 * helmetRadius + bodyHeight + scaledCellSize/4);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(cx + bodyWidth/4, y + 2 * helmetRadius + bodyHeight);
+      ctx.lineTo(cx + bodyWidth/4, y + 2 * helmetRadius + bodyHeight + scaledCellSize/4);
+      ctx.stroke();
+  
+      ctx.fillStyle = '#333333';
+      ctx.fillRect(cx - bodyWidth/4 - scaledCellSize/8, y + 2 * helmetRadius + bodyHeight + scaledCellSize/4, scaledCellSize/4, scaledCellSize/8);
+      ctx.fillRect(cx + bodyWidth/4 - scaledCellSize/8, y + 2 * helmetRadius + bodyHeight + scaledCellSize/4, scaledCellSize/4, scaledCellSize/8);
+    }
+  
+    function isValidMove(row, col) {
+      return (
+        row >= 0 && row < mazeSize &&
+        col >= 0 && col < mazeSize &&
+        maze[row][col] === 0
+      );
+    }
+  
+    function findShortestPath() {
+      // A* algorithm
+      const openSet = [{
+        row: 0,
+        col: 0,
+        g: 0,
+        h: manhattanDistance(0, 0),
+        f: manhattanDistance(0, 0),
+        path: [{ row: 0, col: 0 }]
+      }];
+      const closedSet = Array(mazeSize).fill().map(() => Array(mazeSize).fill(false));
+      const directions = [
+        { dr: -1, dc: 0 }, // up
+        { dr: 1, dc: 0 },  // down
+        { dr: 0, dc: -1 }, // left
+        { dr: 0, dc: 1 }   // right
+      ];
+  
+      function manhattanDistance(row, col) {
+        return Math.abs(row - (mazeSize - 1)) + Math.abs(col - (mazeSize - 1));
+      }
+  
+      while (openSet.length > 0) {
+        // Find node with lowest f score
+        let currentIdx = 0;
+        for (let i = 1; i < openSet.length; i++) {
+          if (openSet[i].f < openSet[currentIdx].f) {
+            currentIdx = i;
+          }
+        }
+        const current = openSet.splice(currentIdx, 1)[0];
+  
+        const { row, col, path } = current;
+        if (row === mazeSize - 1 && col === mazeSize - 1) {
+          return path;
+        }
+  
+        closedSet[row][col] = true;
+  
+        for (const { dr, dc } of directions) {
+          const newRow = row + dr;
+          const newCol = col + dc;
+          if (
+            newRow >= 0 && newRow < mazeSize &&
+            newCol >= 0 && newCol < mazeSize &&
+            maze[newRow][newCol] === 0 &&
+            !closedSet[newRow][newCol]
+          ) {
+            const g = current.g + 1;
+            const h = manhattanDistance(newRow, newCol);
+            const f = g + h;
+  
+            // Check if this position is already in openSet with a lower f score
+            let inOpenSet = false;
+            for (const node of openSet) {
+              if (node.row === newRow && node.col === newCol && node.f <= f) {
+                inOpenSet = true;
+                break;
+              }
+            }
+  
+            if (!inOpenSet) {
+              openSet.push({
+                row: newRow,
+                col: newCol,
+                g: g,
+                h: h,
+                f: f,
+                path: [...path, { row: newRow, col: newCol }]
+              });
+            }
+          }
+        }
+      }
+      return [];
+    }
+  
+    function drawPath() {
+      if (!showSolution || solutionPath.length === 0) return;
+      ctx.strokeStyle = '#FFD700';
+      ctx.lineWidth = cellSize / 10;
+      ctx.beginPath();
+      for (let i = 0; i < solutionPath.length; i++) {
+        const { row, col } = solutionPath[i];
+        const x = col * cellSize + cellSize / 2;
+        const y = row * cellSize + cellSize / 2;
+        if (i === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+      }
+      ctx.stroke();
+    }
+  
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBackground();
+      drawMaze();
+      drawPath();
+      drawGoal();
+      if (!isAnimating) drawPlayer();
+    }
+  
+    function checkWin() {
+      if (player.row === mazeSize - 1 && player.col === mazeSize - 1) {
+        levelCount++;
+        updateLevelDisplay();
+        clearInterval(moveInterval);
+        isAnimating = true;
+        rocketOffset = 0;
+        showSolution = false;
+        solutionPath = [];
+        isAutoMoving = false;
+        requestAnimationFrame(animateRocket);
+      }
+    }
+  
+    function animateRocket() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBackground();
+      drawMaze();
+      drawPath();
+      drawGoal();
+      rocketOffset += 5;
+      if (rocketOffset <= 400) {
+        requestAnimationFrame(animateRocket);
+      } else {
+        isAnimating = false;
+        mazeSize += 2;              // Increase maze size by 2
+        cellSize = 400 / mazeSize;  // Update cell size
+        generateMaze();
+        updateMazeSizeDisplay();    // Update maze size display
+        player.row = 0;
+        player.col = 0;
+        rocketOffset = 0;
+        draw();
+      }
+    }
+  
+    function movePlayer(direction) {
+      if (isAnimating || isAutoMoving) return;
+      if (!timerStarted && levelCount === 0) {
+        startTime = Date.now();
+        timerStarted = true;
+        timerInterval = setInterval(updateTimer, 1000);
+      }
+      let newRow = player.row;
+      let newCol = player.col;
+  
+      if (direction === 'up') newRow--;
+      else if (direction === 'down') newRow++;
+      else if (direction === 'left') newCol--;
+      else if (direction === 'right') newCol++;
+  
+      if (isValidMove(newRow, newCol)) {
+        player.row = newRow;
+        player.col = newCol;
+        draw();
+        checkWin();
+      }
+    }
+  
+    function autoMovePlayer() {
+      if (solutionPath.length < 2) return;
+      isAutoMoving = true;
+      let index = 1; // Start from second position (first is (0,0))
+  
+      function moveStep() {
+        if (index >= solutionPath.length || !isAutoMoving) {
+          isAutoMoving = false;
+          draw();
+          checkWin();
+          return;
+        }
+        const { row, col } = solutionPath[index];
+        player.row = row;
+        player.col = col;
+        draw();
+        checkWin();
+        if (player.row === mazeSize - 1 && player.col === mazeSize - 1) {
+          isAutoMoving = false;
+          return;
+        }
+        index++;
+        setTimeout(moveStep, 300); // Move every 300ms
+      }
+  
+      if (!timerStarted && levelCount === 0) {
+        startTime = Date.now();
+        timerStarted = true;
+        timerInterval = setInterval(updateTimer, 1000);
+      }
+      moveStep();
+    }
+  
+    function updateTimer() {
+      const currentTime = Date.now();
+      const elapsedTime = Math.floor((currentTime - startTime) / 1000);
+      const minutes = Math.floor(elapsedTime / 60);
+      const seconds = elapsedTime % 60;
+      timerDisplay.textContent = `Time: ${minutes}m ${seconds}s`;
+    }
+  
+    function getTouchPos(e) {
+      const rect = joystick.getBoundingClientRect();
+      return {
+        x: e.touches[0].clientX - rect.left,
+        y: e.touches[0].clientY - rect.top
+      };
+    }
+  
+    function getMousePos(e) {
+      const rect = joystick.getBoundingClientRect();
+      return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+    }
+  
+    function moveJoystick(pos) {
+      if (isAutoMoving) return;
+      const dx = pos.x - joystickCenterX;
+      const dy = pos.y - joystickCenterY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const maxDistance = 70;
+      const threshold = 10;
+  
+      if (distance > maxDistance) {
+        const angle = Math.atan2(dy, dx);
+        handleCenterX = joystickCenterX + maxDistance * Math.cos(angle);
+        handleCenterY = joystickCenterY + maxDistance * Math.sin(angle);
+      } else {
+        handleCenterX = pos.x;
+        handleCenterY = pos.y;
+      }
+  
+      joystickHandle.style.left = `${handleCenterX - 30}px`;
+      joystickHandle.style.top = `${handleCenterY - 30}px`;
+  
+      if (distance < threshold) {
+        currentDirection = null;
+      } else {
+        const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+        if (angle > -45 && angle <= 45) currentDirection = 'right';
+        else if (angle > 45 && angle <= 135) currentDirection = 'down';
+        else if (angle > -135 && angle <= -45) currentDirection = 'up';
+        else currentDirection = 'left';
+      }
+    }
+  
+    function resetJoystick() {
+      joystickHandle.style.left = '70px';
+      joystickHandle.style.top = '70px';
+      currentDirection = null;
+    }
+  
+    joystick.addEventListener('touchstart', (e) => {
+      if (isAnimating || isAutoMoving) return;
+      e.preventDefault();
+      isJoystickActive = true;
+      const pos = getTouchPos(e);
+      moveJoystick(pos);
+      moveInterval = setInterval(() => {
+        if (currentDirection) {
+          movePlayer(currentDirection);
+        }
+      }, 200);
+    });
+  
+    joystick.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      if (isJoystickActive) {
+        const pos = getTouchPos(e);
+        moveJoystick(pos);
+      }
+    });
+  
+    joystick.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      isJoystickActive = false;
+      clearInterval(moveInterval);
+      resetJoystick();
+    });
+  
+    joystick.addEventListener('mousedown', (e) => {
+      if (isAnimating || isAutoMoving) return;
+      isJoystickActive = true;
+      const pos = getMousePos(e);
+      moveJoystick(pos);
+      moveInterval = setInterval(() => {
+        if (currentDirection) {
+          movePlayer(currentDirection);
+        }
+      }, 200);
+    });
+  
+    joystick.addEventListener('mousemove', (e) => {
+      if (isJoystickActive) {
+        const pos = getMousePos(e);
+        moveJoystick(pos);
+      }
+    });
+  
+    joystick.addEventListener('mouseup', (e) => {
+      isJoystickActive = false;
+      clearInterval(moveInterval);
+      resetJoystick();
+    });
+  
+    joystick.addEventListener('mouseleave', (e) => {
+      if (isJoystickActive) {
+        isJoystickActive = false;
+        clearInterval(moveInterval);
+        resetJoystick();
+      }
+    });
+  
+    function initJoystick() {
+      const rect = joystick.getBoundingClientRect();
+      joystickCenterX = rect.width / 2;
+      joystickCenterY = rect.height / 2;
+      handleCenterX = joystickCenterX;
+      handleCenterY = joystickCenterY;
+    }
+  
+    window.addEventListener('load', initJoystick);
+    window.addEventListener('resize', initJoystick);
+  
+    window.addEventListener('keydown', (e) => {
+      if (isAnimating || isAutoMoving) return;
+      if (e.key.startsWith('Arrow')) {
+        e.preventDefault();
+        if (e.key === 'ArrowUp') movePlayer('up');
+        else if (e.key === 'ArrowDown') movePlayer('down');
+        else if (e.key === 'ArrowLeft') movePlayer('left');
+        else if (e.key === 'ArrowRight') movePlayer('right');
+      }
+    });
+  
+    function showPath() {
+      if (isAnimating || isAutoMoving) return;
+      showSolution = true;
+      if (solutionPath.length === 0) {
+        solutionPath = findShortestPath();
+      }
+      if (solutionPath.length > 0) {
+        autoMovePlayer();
+      }
+      draw();
+    }
+  
+    generateMaze();
+    updateMazeSizeDisplay();
+    draw();
+    updateLevelDisplay();
+  </script>
+</body>
+</html>
