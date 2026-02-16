@@ -64,8 +64,9 @@
             justify-content: center;
             align-items: center;
             perspective: 1500px;
-            transform: scale(2);
-            /* Doubled base scale (2x Zoom) */
+            /* Fluid scaling based on viewport width, maintaining 2x zoom feel */
+            transform: scale(clamp(1.2, calc(2 * (100vw / 1440)), 2.5));
+            transition: transform 0.1s linear;
         }
 
         .solar-system-plane {
@@ -80,18 +81,8 @@
             transition: transform 0.5s ease;
         }
 
-        /* Responsive Scaling for Solar System (Maintaining 2x relative zoom) */
-        @media (max-width: 1024px) {
-            .solar-system {
-                transform: scale(1.6);
-            }
-        }
-
+        /* Legacy media queries removed in favor of fluid scaling above */
         @media (max-width: 768px) {
-            .solar-system {
-                transform: scale(1.2);
-            }
-
             .sun {
                 width: 100px;
                 height: 100px;
@@ -296,40 +287,42 @@
     <div class="stardust"></div>
 
     <!-- Navigation Bar -->
-    <nav
-        class="fixed top-0 left-0 w-full p-6 md:p-8 z-50 flex justify-between items-center max-w-[1400px] left-1/2 -translate-x-1/2">
-        <div class="relative z-[60] order-3 md:order-1">
-            <a href="index.html" class="text-xl md:text-2xl font-bold glow tracking-wider block">APSIS INC.</a>
-            <p class="text-[8px] md:text-[10px] text-slate-500 uppercase tracking-[0.3em] mt-1">Human-AI Evolution</p>
-        </div>
+    <nav class="fixed top-0 left-0 w-full z-50">
+        <div class="max-w-[1400px] mx-auto p-6 md:p-8 flex justify-between items-center relative">
+            <div class="relative z-[60] order-3 md:order-1 text-right md:text-left">
+                <a href="index.html" class="text-xl md:text-2xl font-bold glow tracking-wider block">APSIS INC.</a>
+                <p class="text-[8px] md:text-[10px] text-slate-500 uppercase tracking-[0.3em] mt-1">Human-AI Evolution
+                </p>
+            </div>
 
-        <!-- Desktop Navigation -->
-        <div class="hidden md:flex space-x-10 text-slate-400 font-medium text-sm tracking-wide">
-            <a href="index.html" class="text-white">Home</a>
-            <a href="aboutme.html" class="hover:text-white transition">About</a>
-            <a href="projects.html" class="hover:text-white transition">Projects</a>
-            <a href="https://medium.com/@apsis.g9" target="_blank" class="hover:text-white transition">Blog</a>
-        </div>
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex space-x-10 text-slate-400 font-medium text-sm tracking-wide">
+                <a href="index.html" class="text-white">Home</a>
+                <a href="aboutme.html" class="hover:text-white transition">About</a>
+                <a href="projects.html" class="hover:text-white transition">Projects</a>
+                <a href="https://medium.com/@apsis.g9" target="_blank" class="hover:text-white transition">Blog</a>
+            </div>
 
-        <!-- Mobile Menu Button -->
-        <button id="mobile-menu-btn"
-            class="md:hidden relative z-[60] p-2 text-slate-400 hover:text-white transition order-1">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M4 6h16M4 12h16M4 18h16"></path>
-                <path id="close-icon" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-        </button>
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn"
+                class="md:hidden relative z-[60] p-2 text-slate-400 hover:text-white transition order-1">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6h16M4 12h16M4 18h16"></path>
+                    <path id="close-icon" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
 
-        <!-- Mobile Menu Dropdown -->
-        <div id="mobile-menu"
-            class="absolute top-full left-0 w-full bg-[#0b0d17]/95 backdrop-blur-xl z-[55] flex flex-col items-center py-8 space-y-6 opacity-0 pointer-events-none -translate-y-4 transition-all duration-300 md:hidden border-b border-white/10">
-            <a href="index.html" class="text-xl font-semibold text-white">Home</a>
-            <a href="aboutme.html" class="text-xl font-semibold text-slate-400 hover:text-white">About</a>
-            <a href="projects.html" class="text-xl font-semibold text-slate-400 hover:text-white">Projects</a>
-            <a href="https://medium.com/@apsis.g9" target="_blank"
-                class="text-xl font-semibold text-slate-400 hover:text-white">Blog</a>
+            <!-- Mobile Menu Dropdown -->
+            <div id="mobile-menu"
+                class="absolute top-full left-0 w-full bg-[#0b0d17]/95 backdrop-blur-xl z-[55] flex flex-col items-center py-8 space-y-6 opacity-0 pointer-events-none -translate-y-4 transition-all duration-300 md:hidden border-b border-white/10">
+                <a href="index.html" class="text-xl font-semibold text-white">Home</a>
+                <a href="aboutme.html" class="text-xl font-semibold text-slate-400 hover:text-white">About</a>
+                <a href="projects.html" class="text-xl font-semibold text-slate-400 hover:text-white">Projects</a>
+                <a href="https://medium.com/@apsis.g9" target="_blank"
+                    class="text-xl font-semibold text-slate-400 hover:text-white">Blog</a>
+            </div>
         </div>
     </nav>
 
