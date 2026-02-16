@@ -28,23 +28,13 @@
             border-left: 2px solid #6366f1;
         }
     </style>
+    <script src="shared.js" defer></script>
 </head>
 
 <body class="min-h-screen">
 
-    <!-- Navigation -->
-    <nav class="p-8 max-w-6xl mx-auto flex justify-between items-center">
-        <div>
-            <a href="index.html" class="text-2xl font-bold glow tracking-wider block">APSIS INC.</a>
-            <p class="text-[10px] text-slate-500 uppercase tracking-[0.3em] mt-1">Human-AI Evolution</p>
-        </div>
-        <div class="space-x-8 text-slate-400 font-medium text-sm">
-            <a href="index.html" class="hover:text-white transition">Home</a>
-            <a href="aboutme.html" class="text-white border-b-2 border-indigo-500 pb-1">About</a>
-            <a href="projects.html" class="hover:text-white transition">Projects</a>
-            <a href="https://medium.com/@apsis.g9" target="_blank" class="hover:text-white transition">Blog</a>
-        </div>
-    </nav>
+    <!-- Shared Navigation -->
+    <apsis-nav></apsis-nav>
 
     <!-- Main Content -->
     <main class="max-w-4xl mx-auto px-8 py-20">
