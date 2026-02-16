@@ -482,7 +482,7 @@
                     if (e.target.closest('#solar-canvas') || e.target.closest('.planet-label')) {
                         this.raycaster.setFromCamera(this.mouse, this.camera);
                         const intersects = this.raycaster.intersectObject(this.sun);
-                        if (intersects.length > 0) this.timeMultiplier = 4;
+                        if (intersects.length > 0) this.timeMultiplier = 16;
                     }
                 });
                 window.addEventListener('mouseup', () => this.timeMultiplier = 1);
@@ -497,7 +497,7 @@
                         const intersects = this.raycaster.intersectObject(this.sun);
                         if (intersects.length > 0) {
                             e.preventDefault();
-                            this.timeMultiplier = 4;
+                            this.timeMultiplier = 16;
                         }
                     }
                 }, { passive: false });
