@@ -64,6 +64,8 @@
             justify-content: center;
             align-items: center;
             perspective: 1500px;
+            transform: scale(2);
+            /* Doubled base scale (2x Zoom) */
         }
 
         .solar-system-plane {
@@ -78,16 +80,16 @@
             transition: transform 0.5s ease;
         }
 
-        /* Responsive Scaling for Solar System */
+        /* Responsive Scaling for Solar System (Maintaining 2x relative zoom) */
         @media (max-width: 1024px) {
             .solar-system {
-                transform: scale(0.8);
+                transform: scale(1.6);
             }
         }
 
         @media (max-width: 768px) {
             .solar-system {
-                transform: scale(0.6);
+                transform: scale(1.2);
             }
 
             .sun {
@@ -99,8 +101,8 @@
 
         @media (max-width: 480px) {
             .solar-system {
-                transform: scale(0.75);
-                /* Zoom in on center instead of shrinking too much */
+                transform: scale(1.5);
+                /* Immersive zoom for mobile landscape */
             }
 
             .sun {
@@ -336,7 +338,7 @@
 
             <!-- AI Maze Game -->
             <div class="orbit" style="width: 300px; height: 300px;"></div>
-            <div class="orbit-container" style="--radius: 300px; --period: 25s; --size: 30px;">
+            <div class="orbit-container" style="--radius: 300px; --period: 12.5s; --size: 30px;">
                 <a href="Javascript Maze Game.html" class="planet-anchor"
                     style="--color: #64748b; --color-bright: #94a3b8; --color-glow: rgba(148, 163, 184, 0.4);">
                     <div class="planet-body"></div>
@@ -346,7 +348,7 @@
 
             <!-- Cosmic Blog -->
             <div class="orbit" style="width: 450px; height: 450px;"></div>
-            <div class="orbit-container" style="--radius: 450px; --period: 45s; --size: 45px;">
+            <div class="orbit-container" style="--radius: 450px; --period: 22.5s; --size: 45px;">
                 <a href="https://medium.com/@apsis.g9" class="planet-anchor" target="_blank"
                     style="--color: #312e81; --color-bright: #6366f1; --color-glow: rgba(99, 102, 241, 0.5);">
                     <div class="planet-body"></div>
@@ -354,19 +356,29 @@
                 </a>
             </div>
 
-            <!-- Projects -->
-            <div class="orbit" style="width: 600px; height: 600px;"></div>
-            <div class="orbit-container" style="--radius: 600px; --period: 70s; --size: 55px;">
-                <a href="projects.html" class="planet-anchor"
-                    style="--color: #4338ca; --color-bright: #818cf8; --color-glow: rgba(129, 140, 248, 0.5);">
-                    <div class="planet-body planet-ring"></div>
+            <!-- AI Literacy Projects -->
+            <div class="orbit" style="width: 650px; height: 650px;"></div>
+            <div class="orbit-container" style="--radius: 650px; --period: 32.5s; --size: 55px;">
+                <a href="https://www.apsis.id" class="planet-anchor" target="_blank"
+                    style="--color: #1e1b4b; --color-bright: #4f46e5; --color-glow: rgba(79, 70, 229, 0.5);">
+                    <div class="planet-body"></div>
                     <span class="planet-label">AI Literacy Projects</span>
                 </a>
             </div>
 
-            <!-- About Me -->
-            <div class="orbit" style="width: 750px; height: 750px;"></div>
-            <div class="orbit-container" style="--radius: 750px; --period: 100s; --size: 40px;">
+            <!-- Projects -->
+            <div class="orbit" style="width: 600px; height: 600px;"></div>
+            <div class="orbit-container" style="--radius: 600px; --period: 35s; --size: 55px;">
+                <a href="projects.html" class="planet-anchor"
+                    style="--color: #4338ca; --color-bright: #818cf8; --color-glow: rgba(129, 140, 248, 0.5);">
+                    <div class="planet-body planet-ring"></div>
+                    <span class="planet-label">Technical Projects</span>
+                </a>
+            </div>
+
+            <!-- The Founder -->
+            <div class="orbit" style="width: 850px; height: 850px;"></div>
+            <div class="orbit-container" style="--radius: 850px; --period: 50s; --size: 40px;">
                 <a href="aboutme.html" class="planet-anchor"
                     style="--color: #1e1b4b; --color-bright: #4f46e5; --color-glow: rgba(79, 70, 229, 0.5);">
                     <div class="planet-body"></div>
@@ -375,8 +387,8 @@
             </div>
 
             <!-- YouTube -->
-            <div class="orbit" style="width: 900px; height: 900px;"></div>
-            <div class="orbit-container" style="--radius: 900px; --period: 140s; --size: 50px;">
+            <div class="orbit" style="width: 950px; height: 950px;"></div>
+            <div class="orbit-container" style="--radius: 950px; --period: 140s; --size: 50px;">
                 <a href="https://www.youtube.com/@kVarfpv" class="planet-anchor" target="_blank"
                     style="--color: #312e81; --color-bright: #a5b4fc; --color-glow: rgba(165, 180, 252, 0.4);">
                     <div class="planet-body"></div>
