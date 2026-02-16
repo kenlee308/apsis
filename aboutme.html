@@ -1,112 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Me - Apsis Inc.</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background: #000000;
+            font-family: 'Outfit', sans-serif;
+            background-color: #0b0d17;
             color: #ffffff;
-            font-family: 'Arial', sans-serif;
-            overflow-x: hidden;
         }
-        .navbar {
-            background: rgba(0, 0, 0, 0.7);
+
+        .glow {
+            text-shadow: 0 0 10px rgba(99, 102, 241, 0.5), 0 0 20px rgba(99, 102, 241, 0.3);
         }
-        .section-bg {
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
+
+        .content-container {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
         }
-        .profile-img {
-            border: 4px solid #4B0082;
-            box-shadow: 0 0 20px rgba(75, 0, 130, 0.8);
-        }
-        .glow-text {
-            text-shadow: 0 0 10px #4B0082, 0 0 20px #4B0082;
-        }
-        .hover-scale:hover {
-            transform: scale(1.05);
-            transition: transform 0.3s ease-in-out;
-        }
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            background: url('https://kenlee308.github.io/apsis/assets/images/stars.png') repeat;
-            opacity: 0.8;
-            z-index: -1;
+
+        .timeline-item {
+            border-left: 2px solid #6366f1;
         }
     </style>
 </head>
-<body>
-    <div class="stars"></div>
-    <nav class="navbar fixed top-0 w-full p-4 flex justify-between items-center z-10">
-        <a href="https://kenlee308.github.io/apsis/index.html" class="text-2xl font-bold glow-text">Apsis Inc.</a>
+
+<body class="min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="p-8 max-w-6xl mx-auto flex justify-between items-center">
         <div>
-            <a href="index.html" class="text-lg mx-4 hover:text-indigo-400">Home</a>
-            <a href="aboutme.html" class="text-lg mx-4 hover:text-indigo-400">About</a>
-            <a href="projects.html" class="text-lg mx-4 hover:text-indigo-400">Projects</a>
-            <a href="https://www.youtube.com/@kVarfpv" target="_blank" class="text-lg mx-4 hover:text-indigo-400">YouTube</a>
-            <a href="https://medium.com/@apsis.g9" target="_blank" class="text-lg mx-4 hover:text-indigo-400">Blog</a>
-            <a href="https://www.linkedin.com/in/kenny-lee-75841319" target="_blank" class="text-lg mx-4 hover:text-indigo-400">LinkedIn</a>
+            <a href="index.html" class="text-2xl font-bold glow tracking-wider block">APSIS INC.</a>
+            <p class="text-[10px] text-slate-500 uppercase tracking-[0.3em] mt-1">Human-AI Evolution</p>
+        </div>
+        <div class="space-x-8 text-slate-400 font-medium text-sm">
+            <a href="index.html" class="hover:text-white transition">Home</a>
+            <a href="aboutme.html" class="text-white border-b-2 border-indigo-500 pb-1">About</a>
+            <a href="projects.html" class="hover:text-white transition">Projects</a>
+            <a href="https://medium.com/@apsis.g9" target="_blank" class="hover:text-white transition">Blog</a>
         </div>
     </nav>
 
-    <section class="min-h-screen flex items-center justify-center py-12">
-        <div class="container mx-auto px-4">
-            <div class="section-bg p-8 md:p-12 hover-scale">
-                <div class="flex flex-col md:flex-row items-center">
-                    <img src="https://miro.medium.com/v2/resize:fit:584/1*fmWkrNMsic9kpZy7D0YzTg.jpeg" alt="Profile Picture" class="w-48 h-48 md:w-64 md:h-64 rounded-full mb-6 md:mb-0 md:mr-8 profile-img">
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-8 py-20">
+
+        <header class="mb-16">
+            <h1 class="text-5xl font-bold mb-4 tracking-tight">The <span class="text-indigo-400">Founder-Engineer</span>
+                Narrative</h1>
+            <p class="text-xl text-slate-400">Bridging Applied Physics and Industrial Automation with AI.</p>
+        </header>
+
+        <section class="content-container p-8 md:p-12 rounded-3xl space-y-8 leading-relaxed text-slate-300">
+            <p class="text-lg">
+                I am **Kenny Lee**, an Atlanta-based founder-engineer with a background in **Applied Physics** and a
+                decade of experience in the industrial motor and power systems sectors. My journey is defined by a
+                transition from the physical logic of industrial automation to the digital reasoning of **Agentic AI**.
+            </p>
+
+            <p>
+                My early years in IT support and industrial electrical components (WorldWide Electric, Techtop) taught
+                me the value of resilient, reliable systems. Today, I apply that same "no-nonsense" industrial mindset
+                to AI development. I don't build toys; I build tools for the **Golden Age of AI Literacy**.
+            </p>
+
+            <blockquote class="border-l-4 border-indigo-500 pl-6 py-2 italic text-white text-xl font-light">
+                "Question Everything. Build the Future. Together."
+            </blockquote>
+
+            <div class="space-y-6 pt-8">
+                <h2 class="text-2xl font-bold text-white mb-4">Core Philosophy</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                        <h1 class="text-4xl md:text-5xl font-bold glow-text mb-4">About Me</h1>
-                        <p class="text-lg mb-4">I’m an Applied Physics graduate and former product manager transitioning into AI and Robotics, with a passion for autonomous systems and machine learning. A self-taught tinkerer, I’m building my skills through hands-on projects and seeking mentorship to accelerate my journey.</p>
-                        <p class="text-lg mb-4">Starting in IT and Industrial Automation, I honed my problem-solving skills, which I now channel into human-AI collaboration and robotics. Through <span class="font-bold">Apsis Inc.</span>, I’m exploring how humans and machines can evolve together, challenging conventions and redefining possibilities.</p>
-                        <p class="text-lg mb-4">My goal? To catalyze a paradigm shift in how humanity evolves with technology, becoming a linchpin in a symbiotic future. I’m not chasing titles or traditional gigs—just here to create, spark ideas, and rethink the future. <span class="italic">Question Everything. Build the Future. Together.</span></p>
+                        <h3 class="text-indigo-400 font-bold mb-2">Human-AI Symbiosis</h3>
+                        <p class="text-sm">I believe the future isn't about AI replacing humans, but about building the
+                            "linchpin" tools that allow workforce professionals—from shop floors to research labs—to
+                            navigate an AI-driven economy with confidence.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-indigo-400 font-bold mb-2">Local-First Ethics</h3>
+                        <p class="text-sm">Privacy and data governance are the cornerstones of trust. My projects
+                            (LocalGravity, Memochat) focus on local-first processing to ensure that the user remains the
+                            owner of their intelligence.</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <section class="py-8">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl md:text-4xl font-bold glow-text mb-6 text-center">Experience</h2>
-            <div class="section-bg p-8 hover-scale">
-                <h3 class="text-2xl font-semibold mb-4">Founder & Builder, Apsis Inc. (Present)</h3>
-                <p class="text-lg mb-4">Launched Apsis to push the boundaries of human-AI potential. No fancy office yet—just big ideas and a relentless drive to build the future.</p>
-                <h3 class="text-2xl font-semibold mb-4">IT Support Role (Past)</h3>
-                <p class="text-lg">Solved technical puzzles and kept systems running—skills I’m now turning toward AI and robotics experiments.</p>
+            <div class="pt-12">
+                <h2 class="text-2xl font-bold text-white mb-6">Workforce & Grant Alignment</h2>
+                <p class="mb-6">
+                    M projects are developed in alignment with the **U.S. Department of Labor (DOL) AI Literacy
+                    Framework**. I am committed to:
+                </p>
+                <ul class="list-disc list-inside space-y-3 pl-4">
+                    <li>Accelerating <strong>effective AI skill development</strong> across technical industries.</li>
+                    <li>Providing <strong>open-source resources</strong> for workforce upskilling.</li>
+                    <li>Pioneering <strong>safe and ethical implementation</strong> of autonomous agents in industrial
+                        contexts.</li>
+                </ul>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="py-12 bg-black bg-opacity-50">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold glow-text mb-8">Let’s Shape the Future</h2>
-            <p class="text-lg mb-6">I’m always open to collaboration, mentorship, or just geeking out about AI and robotics. Reach out, and let’s build something extraordinary together.</p>
-            <a href="mailto:apsis.g9@gmail.com" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full hover:bg-indigo-800 transition">Get in Touch</a>
-        </div>
-    </section>
+        <footer class="mt-20 text-center">
+            <div class="flex justify-center space-x-6 mb-8">
+                <a href="https://www.linkedin.com/in/kenny-lee-75841319"
+                    class="text-slate-400 hover:text-white">LinkedIn</a>
+                <a href="https://www.youtube.com/@kVarfpv" class="text-slate-400 hover:text-white">YouTube</a>
+                <a href="https://twitter.com/kenlee308" class="text-slate-400 hover:text-white">X / Twitter</a>
+            </div>
+            <a href="mailto:apsis.g9@gmail.com"
+                class="inline-block bg-indigo-600 text-white px-8 py-4 rounded-full font-bold hover:bg-indigo-500 transition-colors">
+                Let's Build the Future
+            </a>
+        </footer>
 
-    <footer class="bg-black bg-opacity-70 py-6 text-center">
-        <p class="text-lg">© 2025 Apsis Inc. All rights reserved.</p>
-        <div class="mt-4">
-            <a href="https://www.youtube.com/@kVarfpv" target="_blank" class="mx-2 hover:text-indigo-400">YouTube</a>
-            <a href="https://medium.com/@apsis.g9" target="_blank" class="mx-2 hover:text-indigo-400">Blog</a>
-            <a href="https://www.linkedin.com/in/kenny-lee-75841319" target="_blank" class="mx-2 hover:text-indigo-400">LinkedIn</a>
-        </div>
-    </footer>
+    </main>
 
-    <script>
-        window.addEventListener('scroll', () => {
-            const stars = document.querySelector('.stars');
-            stars.style.transform = `translateY(${window.scrollY * 0.5}px)`;
-        });
-    </script>
 </body>
+
 </html>

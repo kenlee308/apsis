@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,7 +13,9 @@
             --accent-color: #6366f1;
             --sun-color: #f59e0b;
             --sun-glow: #d97706;
-            --orbit-color: rgba(255, 255, 255, 0.1);
+            --orbit-color: rgba(255, 255, 255, 0.05);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
         body {
@@ -30,7 +31,27 @@
         }
 
         .glow {
-            text-shadow: 0 0 10px rgba(99, 102, 241, 0.5), 0 0 20px rgba(99, 102, 241, 0.3);
+            text-shadow: 0 0 15px rgba(99, 102, 241, 0.6), 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Nav & Logo Styling */
+        nav a {
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
         }
 
         /* Solar System Container */
@@ -45,9 +66,9 @@
 
         /* The Sun */
         .sun {
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle, var(--sun-color) 0%, var(--sun-glow) 70%, transparent 100%);
+            width: 130px;
+            height: 130px;
+            background: radial-gradient(circle at 30% 30%, var(--sun-color) 0%, var(--sun-glow) 60%, #92400e 100%);
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -55,31 +76,37 @@
             font-weight: 700;
             color: white;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.2em;
             z-index: 100;
-            box-shadow: 0 0 60px var(--sun-glow);
+            box-shadow: 0 0 80px rgba(217, 119, 6, 0.5), inset -10px -10px 20px rgba(0, 0, 0, 0.3);
             text-decoration: none;
             cursor: default;
+            animation: sun-pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes sun-pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 60px rgba(217, 119, 6, 0.4), inset -10px -10px 20px rgba(0, 0, 0, 0.3);
+                transform: scale(1);
+            }
+
+            50% {
+                box-shadow: 0 0 100px rgba(217, 119, 6, 0.6), inset -10px -10px 20px rgba(0, 0, 0, 0.3);
+                transform: scale(1.02);
+            }
         }
 
         /* Orbits */
         .orbit {
             position: absolute;
-            border: 1px dashed var(--orbit-color);
+            border: 1px solid var(--orbit-color);
             border-radius: 50%;
             pointer-events: none;
         }
 
         /* Planet & Label Container */
-        .planet-wrapper {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-        }
-
         .planet-body {
             width: var(--size);
             height: var(--size);
@@ -98,28 +125,30 @@
             top: 50%;
             transform: translateY(-50%);
             white-space: nowrap;
-            padding: 6px 12px;
-            background: rgba(11, 13, 23, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            backdrop-filter: blur(4px);
-            font-size: 0.75rem;
+            padding: 6px 14px;
+            background: rgba(11, 13, 23, 0.7);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            backdrop-filter: blur(8px);
+            font-size: 0.7rem;
             font-weight: 600;
             color: #94a3b8;
             text-decoration: none;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: 0.05em;
         }
 
         .planet-anchor:hover .planet-label {
             color: white;
             border-color: var(--accent-color);
-            background: rgba(99, 102, 241, 0.2);
-            transform: translateY(-50%) scale(1.1);
+            background: rgba(99, 102, 241, 0.15);
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
         }
 
         .planet-anchor:hover .planet-body {
-            transform: scale(1.2);
-            box-shadow: 0 0 25px var(--color);
+            transform: scale(1.3);
+            box-shadow: 0 0 30px var(--color);
         }
 
         /* Animations */
@@ -161,18 +190,27 @@
             top: 0;
             left: 50%;
             animation: label-counter-rotate var(--period) linear infinite;
-            pointer-events: none;
         }
 
-        /* Stars Background */
+        /* Background Effects */
         .stars {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background: radial-gradient(circle at center, #161b33 0%, #0b0d17 100%);
+            z-index: -2;
+        }
+
+        .stardust {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: url("https://www.transparenttextures.com/patterns/stardust.png");
-            opacity: 0.3;
+            opacity: 0.15;
             z-index: -1;
         }
     </style>
@@ -180,29 +218,40 @@
 
 <body>
     <div class="stars"></div>
+    <div class="stardust"></div>
 
-    <div class="absolute top-10 left-10 z-20">
-        <h1 class="text-2xl font-bold glow">APSIS INC.</h1>
-        <p class="text-xs text-slate-500 uppercase tracking-widest mt-1">Human-AI Evolution</p>
-    </div>
+    <!-- Navigation Bar -->
+    <nav
+        class="fixed top-0 left-0 w-full p-8 z-50 flex justify-between items-center max-w-[1400px] left-1/2 -translate-x-1/2">
+        <div>
+            <a href="index.html" class="text-2xl font-bold glow tracking-wider block">APSIS INC.</a>
+            <p class="text-[10px] text-slate-500 uppercase tracking-[0.3em] mt-1">Human-AI Evolution</p>
+        </div>
+        <div class="hidden md:flex space-x-10 text-slate-400 font-medium text-sm tracking-wide">
+            <a href="index.html" class="text-white">Home</a>
+            <a href="aboutme.html" class="hover:text-white transition">About</a>
+            <a href="projects.html" class="hover:text-white transition">Projects</a>
+            <a href="https://medium.com/@apsis.g9" target="_blank" class="hover:text-white transition">Blog</a>
+        </div>
+    </nav>
 
     <div class="solar-system">
-        <div class="sun glow">APSIS</div>
+        <div class="sun">APSIS</div>
 
         <!-- AI Maze Game -->
         <div class="orbit" style="width: 300px; height: 300px;"></div>
-        <div class="orbit-container" style="--radius: 300px; --period: 20s;">
+        <div class="orbit-container" style="--radius: 300px; --period: 25s;">
             <a href="Javascript Maze Game.html" class="planet-anchor">
                 <div class="planet-label-wrapper">
                     <div class="planet-body" style="--size: 10px; --color: #94a3b8;"></div>
-                    <span class="planet-label">AI Maze Game</span>
+                    <span class="planet-label">AI Maze Navigator</span>
                 </div>
             </a>
         </div>
 
         <!-- Cosmic Blog -->
         <div class="orbit" style="width: 450px; height: 450px;"></div>
-        <div class="orbit-container" style="--radius: 450px; --period: 36.7s;">
+        <div class="orbit-container" style="--radius: 450px; --period: 45s;">
             <a href="https://medium.com/@apsis.g9" class="planet-anchor" target="_blank">
                 <div class="planet-label-wrapper">
                     <div class="planet-body" style="--size: 14px; --color: #4f46e5;"></div>
@@ -213,7 +262,7 @@
 
         <!-- Projects -->
         <div class="orbit" style="width: 600px; height: 600px;"></div>
-        <div class="orbit-container" style="--radius: 600px; --period: 56.6s;">
+        <div class="orbit-container" style="--radius: 600px; --period: 70s;">
             <a href="projects.html" class="planet-anchor">
                 <div class="planet-label-wrapper">
                     <div class="planet-body" style="--size: 18px; --color: #818cf8;"></div>
@@ -224,7 +273,7 @@
 
         <!-- About Me -->
         <div class="orbit" style="width: 750px; height: 750px;"></div>
-        <div class="orbit-container" style="--radius: 750px; --period: 79s;">
+        <div class="orbit-container" style="--radius: 750px; --period: 100s;">
             <a href="aboutme.html" class="planet-anchor">
                 <div class="planet-label-wrapper">
                     <div class="planet-body" style="--size: 12px; --color: #6366f1;"></div>
@@ -235,7 +284,7 @@
 
         <!-- YouTube -->
         <div class="orbit" style="width: 900px; height: 900px;"></div>
-        <div class="orbit-container" style="--radius: 900px; --period: 103.9s;">
+        <div class="orbit-container" style="--radius: 900px; --period: 140s;">
             <a href="https://www.youtube.com/@kVarfpv" class="planet-anchor" target="_blank">
                 <div class="planet-label-wrapper">
                     <div class="planet-body" style="--size: 16px; --color: #a5b4fc;"></div>
@@ -245,10 +294,36 @@
         </div>
     </div>
 
-    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 text-center z-20">
-        <p class="text-slate-400 text-sm italic font-light">"Question Everything. Build the Future. Together."</p>
-    </div>
+    <!-- Footer -->
+    <footer class="fixed bottom-10 left-0 w-full z-20 px-8 flex flex-col items-center">
+        <div class="flex space-x-6 mb-4">
+            <a href="https://www.linkedin.com/in/kenny-lee-75841319" target="_blank"
+                class="text-slate-500 hover:text-white transition">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                </svg>
+            </a>
+            <a href="https://www.youtube.com/@kVarfpv" target="_blank"
+                class="text-slate-500 hover:text-white transition">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                </svg>
+            </a>
+            <a href="https://twitter.com/kenlee308" target="_blank" class="text-slate-500 hover:text-white transition">
+                <svg class="w-4 h-4 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M23.953 4.57c-.885.392-1.83.656-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.896-.957-2.173-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
+                </svg>
+            </a>
+        </div>
+        <p class="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-light">"Question Everything. Build the
+            Future. Together."</p>
+        <p class="text-[8px] text-slate-700 mt-2">&copy; 2026 APSIS INC.</p>
+    </footer>
 </body>
 
 </html>
-Releasing mouse button...Pressing key...Stoppin
+
+</html>
