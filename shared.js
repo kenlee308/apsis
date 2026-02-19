@@ -108,3 +108,14 @@ class ApsisNav extends HTMLElement {
 }
 
 customElements.define('apsis-nav', ApsisNav);
+
+// --- Stealth Analytics (GoatCounter) ---
+// Privacy-first, no cookies, no tracking banners needed.
+// This script runs silently to provide "who" (location/referrers) and "how many" stats.
+(function() {
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = "//gc.zgo.at/count.js";
+    script.dataset.goatcounter = "https://apsis.goatcounter.com/count";
+    document.head.appendChild(script);
+})();

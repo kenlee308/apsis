@@ -115,6 +115,30 @@
             width: 1.25rem;
             height: 1.25rem;
         }
+
+        /* Project Planet Highlight */
+        .planet-label.highlight {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            padding: 4px 12px;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .planet-label.highlight::after {
+            content: 'NEW';
+            font-size: 8px;
+            background: white;
+            color: #6366f1;
+            padding: 1px 4px;
+            border-radius: 4px;
+            letter-spacing: 0.05em;
+        }
     </style>
     <script src="shared.js" defer></script>
 </head>
@@ -320,7 +344,7 @@
                 const data = [
                     { name: 'AI Maze Navigator', url: 'Javascript Maze Game.html', radius: 150, period: 20, size: 8, color: 0x0ea5e9, target: '_blank' },
                     { name: 'Cosmic Blog', url: 'https://medium.com/@apsis.g9', radius: 250, period: 35, size: 12, color: 0xec4899, target: '_blank' },
-                    { name: 'Technical Projects', url: 'projects.html', radius: 360, period: 75, size: 18, color: 0x8b5cf6 },
+                    { name: 'Technical Projects', url: 'projects.html', radius: 360, period: 75, size: 28, color: 0xa855f7, isNew: true },
                     { name: 'The Founder', url: 'aboutme.html', radius: 480, period: 50, size: 22, color: 0x4f46e5 },
                     { name: 'YouTube', url: 'https://www.youtube.com/@kVarfpv', radius: 600, period: 140, size: 25, color: 0x312e81, target: '_blank' },
                     { name: '2025 Archive', url: 'archive_2025/index.html', radius: 750, period: 200, size: 30, color: 0x64748b, target: '_blank' }
@@ -351,7 +375,7 @@
 
                     // Label (CSS2D)
                     const labelDiv = document.createElement('div');
-                    labelDiv.className = 'planet-label';
+                    labelDiv.className = `planet-label ${p.isNew ? 'highlight' : ''}`;
                     labelDiv.textContent = p.name;
                     labelDiv.style.pointerEvents = 'auto';
                     labelDiv.style.cursor = 'pointer';
