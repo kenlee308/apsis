@@ -16,7 +16,7 @@ class ApsisNav extends HTMLElement {
 
     render() {
         this.innerHTML = `
-        <nav class="fixed top-0 left-0 w-full p-6 md:p-8 z-50 flex justify-between items-center max-w-[1400px] left-1/2 -translate-x-1/2">
+        <nav class="fixed top-0 left-0 w-full px-6 py-4 md:px-8 md:py-5 bg-[#0b0d17]/70 backdrop-blur-md z-50 flex justify-between items-center max-w-[1400px] left-1/2 -translate-x-1/2">
             <!-- Mobile Menu Button -->
             <button id="mobile-menu-btn" class="md:hidden relative z-[60] p-2 text-slate-400 hover:text-white transition">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -28,7 +28,7 @@ class ApsisNav extends HTMLElement {
             <!-- Branding -->
             <div class="relative z-[60] flex flex-col items-center md:items-start flex-1 md:flex-none">
                 <a href="index.html" class="text-xl md:text-2xl font-bold glow tracking-wider block">APSIS INC.</a>
-                <p class="text-[8px] md:text-[10px] text-slate-500 uppercase tracking-[0.3em] mt-1">Human-AI Evolution</p>
+                <p class="text-[8px] md:text-[10px] text-slate-500 uppercase tracking-[0.3em] mt-1">Kenny Lee &middot; Founder</p>
             </div>
 
             <!-- Desktop Navigation -->

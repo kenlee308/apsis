@@ -1,292 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects - Apsis Inc.</title>
+    <title>Projects | Kenny Lee, Apsis Inc.</title>
+    <meta name="description" content="Projects by Kenny Lee: Orbit, Parallax, Tello follow-me, a computer-vision camera rover and LocalGravity, built by orchestrating AI agents.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Projects | Kenny Lee, Apsis Inc.">
+    <meta property="og:description" content="Projects by Kenny Lee: Orbit, Parallax, Tello follow-me, a computer-vision camera rover and LocalGravity, built by orchestrating AI agents.">
+    <meta property="og:url" content="https://kenlee308.github.io/apsis/projects.html">
+    <meta property="og:image" content="https://kenlee308.github.io/apsis/assets/images/Apsis_2025_screenshot.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Outfit', sans-serif;
-            background-color: #0b0d17;
-            color: #ffffff;
-        }
-
-        .glow {
-            text-shadow: 0 0 10px rgba(99, 102, 241, 0.5), 0 0 20px rgba(99, 102, 241, 0.3);
-        }
-
-        .project-card {
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-
-        .project-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(99, 102, 241, 0.5);
-            box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.3);
-        }
-
-        .badge {
-            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-        }
+        body { font-family: 'Outfit', sans-serif; background-color: #0b0d17; color: #fff; }
+        .glow { text-shadow: 0 0 10px rgba(99,102,241,.5), 0 0 20px rgba(99,102,241,.3); }
+        .card { border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.04); border-radius: 1rem; padding: 1.5rem; }
+        .card p, .card li { color: #cbd5e1; line-height: 1.6; }
+        .card a { color: #a5b4fc; font-weight: 600; font-size: .9rem; }
+        .tag { font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: #c4b5fd; }
+        summary { cursor: pointer; }
     </style>
     <script src="shared.js" defer></script>
 </head>
-
-<body class="min-h-screen">
-
-    <!-- Shared Navigation -->
+<body>
     <apsis-nav></apsis-nav>
-
-    <!-- Header Section -->
-    <header class="py-20 px-8 max-w-4xl mx-auto text-center">
-        <h1 class="text-5xl md:text-6xl font-bold mb-6 tracking-tight">Open Source <span
-                class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">AI Literacy</span>
-        </h1>
-        <p class="text-xl text-slate-400 leading-relaxed">
-            Building the foundational tools for the next generation of the workforce. Our projects are designed to align
-            with the <strong>DOL AI Literacy Framework</strong>, ensuring privacy, privacy, and empowerment.
-        </p>
-    </header>
-
-    <!-- Projects Grid -->
-    <main class="max-w-6xl mx-auto px-8 pb-32">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-            <!-- LocalGravity -->
-            <div class="project-card p-6 rounded-2xl flex flex-col">
-                <div class="mb-4">
-                    <span class="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2 block">VS Code
-                        Extension</span>
-                    <h3 class="text-2xl font-bold mb-2">LocalGravity</h3>
-                </div>
-                <p class="text-slate-400 text-sm flex-grow mb-6 leading-relaxed">
-                    A local-first agentic coding environment for high-security industrial software. Prioritizes data
-                    governance and real-time safety.
-                </p>
-                <div class="aspect-video mb-4 rounded-lg overflow-hidden border border-white/10 bg-slate-900/50">
-                    <img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*9Wf6uibqZwoTF5_Zzudpaw.jpeg"
-                        alt="LocalGravity"
-                        class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500">
-                </div>
-                <div class="space-y-4">
-                    <div class="flex flex-wrap gap-2">
-                        <span class="badge text-[10px] px-2 py-1 rounded-full font-bold">ETHICS & PRIVACY</span>
-                        <span class="badge text-[10px] px-2 py-1 rounded-full font-bold">DATA GOVERNANCE</span>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <a href="https://github.com/kenlee308/LocalGravity"
-                            class="text-sm font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-2 group">
-                            Source Code <span class="group-hover:translate-x-1 transition-transform">→</span>
-                        </a>
-                        <a href="https://youtu.be/HhiVBejpeiE" target="_blank"
-                            class="text-sm font-semibold text-purple-400 hover:text-purple-300 flex items-center gap-2 group">
-                            Watch Demo <span class="group-hover:translate-x-1 transition-transform">→</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Memochat -->
-            <div class="project-card p-6 rounded-2xl flex flex-col">
-                <div class="mb-4">
-                    <span class="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2 block">Full-Stack
-                        Assistant</span>
-                    <h3 class="text-2xl font-bold mb-2">Memochat</h3>
-                </div>
-                <p class="text-slate-400 text-sm flex-grow mb-6 leading-relaxed">
-                    Bridging the gap in workforce productivity with context-aware, persistent local AI assistants.
-                </p>
-                <div class="aspect-video mb-4 rounded-lg overflow-hidden border border-white/10 bg-slate-900/50">
-                    <img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*H2n1fC1aKRJYWsiMC5XiBw.jpeg"
-                        alt="Memochat"
-                        class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500">
-                </div>
-                <div class="space-y-4">
-                    <div class="flex flex-wrap gap-2">
-                        <span class="badge text-[10px] px-2 py-1 rounded-full font-bold">HUMAN-AI COLLAB</span>
-                        <span class="badge text-[10px] px-2 py-1 rounded-full font-bold">PERSISTENCE</span>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <a href="https://github.com/kenlee308/Memochat"
-                            class="text-sm font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-2 group">
-                            Source Code <span class="group-hover:translate-x-1 transition-transform">→</span>
-                        </a>
-                        <a href="https://youtu.be/OUh7HCdpnI4" target="_blank"
-                            class="text-sm font-semibold text-purple-400 hover:text-purple-300 flex items-center gap-2 group">
-                            Watch Demo <span class="group-hover:translate-x-1 transition-transform">→</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Knowledge Base -->
-            <div class="project-card p-6 rounded-2xl flex flex-col">
-                <div class="mb-4">
-                    <span class="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2 block">Desktop
-                        Application</span>
-                    <h3 class="text-2xl font-bold mb-2">Knowledge Base</h3>
-                </div>
-                <p class="text-slate-400 text-sm flex-grow mb-6 leading-relaxed">
-                    Electron-based research hub for secure info management and rapid upskilling in technical sectors.
-                </p>
-                <div class="aspect-video mb-4 rounded-lg overflow-hidden border border-white/10 bg-slate-900/50">
-                    <img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*xC9CLZVnRjEFdtq15R6QPA.jpeg"
-                        alt="Knowledge Base"
-                        class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500">
-                </div>
-                <div class="space-y-4">
-                    <div class="flex flex-wrap gap-2">
-                        <span class="badge text-[10px] px-2 py-1 rounded-full font-bold">INFO LITERACY</span>
-                        <span class="badge text-[10px] px-2 py-1 rounded-full font-bold">UPSKILLING</span>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <a href="https://github.com/kenlee308/Knowledge-Base-App"
-                            class="text-sm font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-2 group">
-                            Source Code <span class="group-hover:translate-x-1 transition-transform">→</span>
-                        </a>
-                        <a href="https://youtu.be/nlEBLwsmPAw" target="_blank"
-                            class="text-sm font-semibold text-purple-400 hover:text-purple-300 flex items-center gap-2 group">
-                            Watch Demo <span class="group-hover:translate-x-1 transition-transform">→</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Ollama Agentic IDE -->
-            <div class="project-card p-6 rounded-2xl flex flex-col">
-                <div class="mb-4">
-                    <span class="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2 block">Python
-                        Shell</span>
-                    <h3 class="text-2xl font-bold mb-2">Ollama IDE</h3>
-                </div>
-                <p class="text-slate-400 text-sm flex-grow mb-6 leading-relaxed">
-                    Transparent agent steering for non-experts. Learn how AI tools work by seeing every interaction.
-                </p>
-                <div class="aspect-video mb-4 rounded-lg overflow-hidden border border-white/10 bg-slate-900/50">
-                    <img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*-dD-vjVY3OBC2xHcvbTb5w.jpeg"
-                        alt="Ollama IDE"
-                        class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500">
-                </div>
-                <div class="space-y-4">
-                    <div class="flex flex-wrap gap-2">
-                        <span class="badge text-[10px] px-2 py-1 rounded-full font-bold">TECHNICAL LITERACY</span>
-                        <span class="badge text-[10px] px-2 py-1 rounded-full font-bold">Transparency</span>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <a href="https://github.com/kenlee308/Ollama-Agentic-IDE"
-                            class="text-sm font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-2 group">
-                            Source Code <span class="group-hover:translate-x-1 transition-transform">→</span>
-                        </a>
-                        <a href="https://youtu.be/s3aW5z9B6RA" target="_blank"
-                            class="text-sm font-semibold text-purple-400 hover:text-purple-300 flex items-center gap-2 group">
-                            Watch Demo <span class="group-hover:translate-x-1 transition-transform">→</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- nanobot -->
-            <div class="project-card p-6 rounded-2xl flex flex-col">
-                <div class="mb-4">
-                    <span class="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2 block">Agentic
-                        Framework</span>
-                    <h3 class="text-2xl font-bold mb-2">Industrial Nanobot</h3>
-                </div>
-                <p class="text-slate-400 text-sm flex-grow mb-6 leading-relaxed">
-                    Integrating agentic AI with industrial hardware and robotics. The blueprint for future shop-floor
-                    automation.
-                </p>
-                <div class="aspect-video mb-4 rounded-lg overflow-hidden border border-white/10 bg-slate-900/50">
-                    <img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*9zd2FMe_Aqmy2prKSewJvw.jpeg"
-                        alt="Industrial Nanobot"
-                        class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500">
-                </div>
-                <div class="space-y-4">
-                    <div class="flex flex-wrap gap-2">
-                        <span class="badge text-[10px] px-2 py-1 rounded-full font-bold">ROBOTICS</span>
-                        <span class="badge text-[10px] px-2 py-1 rounded-full font-bold">HARDWARE AI</span>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <a href="https://github.com/kenlee308/nanobot"
-                            class="text-sm font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-2 group">
-                            Source Code <span class="group-hover:translate-x-1 transition-transform">→</span>
-                        </a>
-                        <a href="https://youtu.be/vokaV_BoXig" target="_blank"
-                            class="text-sm font-semibold text-purple-400 hover:text-purple-300 flex items-center gap-2 group">
-                            Watch Demo <span class="group-hover:translate-x-1 transition-transform">→</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Apsis 2025 Archive -->
-            <div class="project-card p-6 rounded-2xl flex flex-col">
-                <div class="mb-4">
-                    <span class="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2 block">Legacy
-                        Portfolio</span>
-                    <h3 class="text-2xl font-bold mb-2">Apsis 2025 Archive</h3>
-                </div>
-                <div class="aspect-video mb-4 rounded-lg overflow-hidden border border-white/10 bg-slate-900/50">
-                    <img src="https://cdn-images-1.medium.com/max/1200/1*wIndUBGKzR7Y3qDxuF_FLg.png" alt="Apsis 2025"
-                        class="w-full h-full object-contain grayscale hover:grayscale-0 transition-all duration-500">
-                </div>
-                <p class="text-slate-400 text-sm flex-grow mb-6 leading-relaxed">
-                    The original 2025 version of Apsis Inc. This serves as a baseline to showcase how much the **AI
-                    coding
-                    agent** has improved in just one year—from simple CSS layouts to GPU-accelerated WebGL environments.
-                </p>
-                <div class="space-y-4">
-                    <div class="flex flex-wrap gap-2">
-                        <span class="badge text-[10px] px-2 py-1 rounded-full font-bold">HISTORY</span>
-                        <span class="badge text-[10px] px-2 py-1 rounded-full font-bold">AI EVOLUTION</span>
-                    </div>
-                    <a href="archive_2025/index.html"
-                        class="text-sm font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-2 group">
-                        Enter Time Capsule <span class="group-hover:translate-x-1 transition-transform">→</span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Maze Game -->
-            <div class="project-card p-6 rounded-2xl flex flex-col">
-                <div class="mb-4">
-                    <span class="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2 block">AI Demo</span>
-                    <h3 class="text-2xl font-bold mb-2">Maze Navigator</h3>
-                </div>
-                <div class="aspect-video mb-4 rounded-lg overflow-hidden border border-white/10 bg-slate-900/50">
-                    <img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*bjSEVyPHUpx3_xBTyidpiA.png"
-                        alt="Maze Navigator"
-                        class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500">
-                </div>
-                <p class="text-slate-400 text-sm flex-grow mb-6 leading-relaxed">
-                    Exploration of AI pathfinding and interactive procedural generation.
-                </p>
-                <div class="space-y-4">
-                    <div class="flex flex-wrap gap-2">
-                        <span class="badge text-[10px] px-2 py-1 rounded-full font-bold">ALGORITHMS</span>
-                        <span class="badge text-[10px] px-2 py-1 rounded-full font-bold">DEMO</span>
-                    </div>
-                    <a href="Javascript Maze Game.html"
-                        class="text-sm font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-2 group">
-                        Play Demo <span class="group-hover:translate-x-1 transition-transform">→</span>
-                    </a>
-                </div>
-            </div>
-
+    <main class="max-w-6xl mx-auto px-6 pt-32 pb-16">
+        <h1 class="text-4xl md:text-5xl font-bold glow mb-4">Projects</h1>
+        <p class="text-slate-400 max-w-2xl mb-12">Software and hardware I've built by orchestrating AI agents: I set the goal and the architecture, the agents do much of the coding, and I test it in the real world.</p>
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div class="card"><p class="tag">Platform &middot; private</p><h2 class="text-xl font-semibold my-2">Orbit</h2><p>A local, private data and case-ops platform, starting with law firms. Built from hands-on SOP and automation work, it replaces scattered spreadsheets and case-management tools.</p><p class="mt-3"><a href="index.html#contact">Demo on request &rarr;</a></p></div>
+            <div class="card"><p class="tag">Desktop AI</p><h2 class="text-xl font-semibold my-2">Parallax</h2><p>A local AI assistant that reads and fills forms in desktop apps.</p></div>
+            <div class="card"><p class="tag">Android &middot; drone</p><h2 class="text-xl font-semibold my-2">Tello follow-me</h2><p>An Android app that makes a DJI Tello drone follow a person using on-device computer vision.</p><p class="mt-3"><a href="https://github.com/kenlee308/tello-follow" target="_blank" rel="noopener">GitHub &rarr;</a></p></div>
+            <div class="card"><p class="tag">Hardware &middot; vision</p><h2 class="text-xl font-semibold my-2">Camera rover</h2><p>An ESP32-CAM + Arduino rover that follows people with computer vision: Arduino Uno motor control, ESP32-CAM Wi-Fi bridge, PC-side vision and a custom HTTP/serial protocol.</p></div>
+            <div class="card"><img src="assets/images/localgravity.jpg" alt="LocalGravity" class="rounded-lg mb-4 w-full h-40 object-cover"><p class="tag">VS Code extension</p><h2 class="text-xl font-semibold my-2">LocalGravity</h2><p>A local-first coding-agent extension that keeps code and data on your own machine.</p><p class="mt-3 flex gap-4"><a href="https://github.com/kenlee308/LocalGravity" target="_blank" rel="noopener">GitHub &rarr;</a><a href="https://youtu.be/HhiVBejpeiE" target="_blank" rel="noopener">Watch demo &rarr;</a></p></div>
+            <div class="card"><img src="assets/images/maze.png" alt="AI Maze Navigator" class="rounded-lg mb-4 w-full h-40 object-cover"><p class="tag">Browser demo</p><h2 class="text-xl font-semibold my-2">AI Maze Navigator</h2><p>A small exploration of AI pathfinding and procedural maze generation.</p><p class="mt-3"><a href="Javascript%20Maze%20Game.html" target="_blank">Play &rarr;</a></p></div>
         </div>
+
+        <details class="card mt-12">
+            <summary class="text-xl font-semibold">Earlier experiments</summary>
+            <div class="grid gap-6 md:grid-cols-3 mt-6">
+                <div><img src="assets/images/memochat.jpg" alt="Memochat" class="rounded-lg mb-3 w-full h-32 object-cover"><h3 class="font-semibold">Memochat</h3><p>A local AI chat assistant with persistent memory.</p><p class="mt-2 flex gap-4"><a href="https://github.com/kenlee308/Memochat" target="_blank" rel="noopener">GitHub &rarr;</a><a href="https://youtu.be/OUh7HCdpnI4" target="_blank" rel="noopener">Demo &rarr;</a></p></div>
+                <div><img src="assets/images/knowledge-base.jpg" alt="Knowledge Base" class="rounded-lg mb-3 w-full h-32 object-cover"><h3 class="font-semibold">Knowledge Base</h3><p>An Electron desktop app for organizing research notes.</p><p class="mt-2 flex gap-4"><a href="https://github.com/kenlee308/Knowledge-Base-App" target="_blank" rel="noopener">GitHub &rarr;</a><a href="https://youtu.be/nlEBLwsmPAw" target="_blank" rel="noopener">Demo &rarr;</a></p></div>
+                <div><img src="assets/images/ollama-ide.jpg" alt="Ollama IDE" class="rounded-lg mb-3 w-full h-32 object-cover"><h3 class="font-semibold">Ollama IDE</h3><p>A Python shell that shows every step a local AI agent takes.</p><p class="mt-2 flex gap-4"><a href="https://github.com/kenlee308/Ollama-Agentic-IDE" target="_blank" rel="noopener">GitHub &rarr;</a><a href="https://youtu.be/s3aW5z9B6RA" target="_blank" rel="noopener">Demo &rarr;</a></p></div>
+            </div>
+        </details>
     </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-white/10 py-12 text-center text-slate-500 text-sm">
-        <p>&copy; 2026 Apsis Inc. | Built for the Golden Age of AI.</p>
-    </footer>
-
 </body>
-
 </html>

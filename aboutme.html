@@ -1,125 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Me - Apsis Inc.</title>
+    <title>About | Kenny Lee, Apsis Inc.</title>
+    <meta name="description" content="Kenny Lee: applied physicist, 10+ years in industrial motors and drives, founder of Apsis, orchestrating AI agents to build real products.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="About | Kenny Lee, Apsis Inc.">
+    <meta property="og:description" content="Kenny Lee: applied physicist, 10+ years in industrial motors and drives, founder of Apsis, orchestrating AI agents to build real products.">
+    <meta property="og:url" content="https://kenlee308.github.io/apsis/aboutme.html">
+    <meta property="og:image" content="https://kenlee308.github.io/apsis/assets/images/Apsis_2025_screenshot.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Outfit', sans-serif;
-            background-color: #0b0d17;
-            color: #ffffff;
-        }
-
-        .glow {
-            text-shadow: 0 0 10px rgba(99, 102, 241, 0.5), 0 0 20px rgba(99, 102, 241, 0.3);
-        }
-
-        .content-container {
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-        }
-
-        .timeline-item {
-            border-left: 2px solid #6366f1;
-        }
+        body { font-family: 'Outfit', sans-serif; background-color: #0b0d17; color: #fff; }
+        .glow { text-shadow: 0 0 10px rgba(99,102,241,.5), 0 0 20px rgba(99,102,241,.3); }
+        .card { border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.04); border-radius: 1rem; padding: 1.5rem; }
+        .card p, .card li { color: #cbd5e1; line-height: 1.6; }
+        .card a { color: #a5b4fc; font-weight: 600; font-size: .9rem; }
+        .tag { font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: #c4b5fd; }
+        summary { cursor: pointer; }
     </style>
     <script src="shared.js" defer></script>
 </head>
-
-<body class="min-h-screen">
-
-    <!-- Shared Navigation -->
+<body>
     <apsis-nav></apsis-nav>
-
-    <!-- Main Content -->
-    <main class="max-w-4xl mx-auto px-8 py-20">
-
-        <header class="mb-16 flex flex-col md:flex-row items-center gap-12 text-center md:text-left">
-            <div class="relative group">
-                <div
-                    class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200">
-                </div>
-                <img src="https://miro.medium.com/v2/resize:fit:584/1*fmWkrNMsic9kpZy7D0YzTg.jpeg" alt="Kenny Lee"
-                    class="relative w-48 h-48 rounded-full border-2 border-white/10 object-cover shadow-2xl">
-            </div>
-            <div>
-                <h1 class="text-5xl font-bold mb-4 tracking-tight">The <span
-                        class="text-indigo-400">Founder-Engineer</span>
-                    Narrative</h1>
-                <p class="text-xl text-slate-400">Bridging Applied Physics and Industrial Automation with AI.</p>
-            </div>
-        </header>
-
-        <section class="content-container p-8 md:p-12 rounded-3xl space-y-8 leading-relaxed text-slate-300">
-            <p class="text-lg">
-                I am **Kenny Lee**, an Atlanta-based founder-engineer with a background in **Applied Physics** and a
-                decade of experience in the industrial motor and power systems sectors. My journey is defined by a
-                transition from the physical logic of industrial automation to the digital reasoning of **Agentic AI**.
-            </p>
-
-            <p>
-                My early years in IT support and industrial electrical components (WorldWide Electric, Techtop) taught
-                me the value of resilient, reliable systems. Today, I apply that same "no-nonsense" industrial mindset
-                to AI development. I don't build toys; I build tools for the **Golden Age of AI Literacy**.
-            </p>
-
-            <blockquote class="border-l-4 border-indigo-500 pl-6 py-2 italic text-white text-xl font-light">
-                "Question Everything. Build the Future. Together."
-            </blockquote>
-
-            <div class="space-y-6 pt-8">
-                <h2 class="text-2xl font-bold text-white mb-4">Core Philosophy</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                        <h3 class="text-indigo-400 font-bold mb-2">Human-AI Symbiosis</h3>
-                        <p class="text-sm">I believe the future isn't about AI replacing humans, but about building the
-                            "linchpin" tools that allow workforce professionals—from shop floors to research labs—to
-                            navigate an AI-driven economy with confidence.</p>
-                    </div>
-                    <div>
-                        <h3 class="text-indigo-400 font-bold mb-2">Local-First Ethics</h3>
-                        <p class="text-sm">Privacy and data governance are the cornerstones of trust. My projects
-                            (LocalGravity, Memochat) focus on local-first processing to ensure that the user remains the
-                            owner of their intelligence.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pt-12">
-                <h2 class="text-2xl font-bold text-white mb-6">Workforce & Grant Alignment</h2>
-                <p class="mb-6">
-                    M projects are developed in alignment with the **U.S. Department of Labor (DOL) AI Literacy
-                    Framework**. I am committed to:
-                </p>
-                <ul class="list-disc list-inside space-y-3 pl-4">
-                    <li>Accelerating <strong>effective AI skill development</strong> across technical industries.</li>
-                    <li>Providing <strong>open-source resources</strong> for workforce upskilling.</li>
-                    <li>Pioneering <strong>safe and ethical implementation</strong> of autonomous agents in industrial
-                        contexts.</li>
-                </ul>
-            </div>
-        </section>
-
-        <footer class="mt-20 text-center">
-            <div class="flex justify-center space-x-6 mb-8">
-                <a href="https://www.linkedin.com/in/kenny-lee-75841319"
-                    class="text-slate-400 hover:text-white">LinkedIn</a>
-                <a href="https://www.youtube.com/@kVarfpv" class="text-slate-400 hover:text-white">YouTube</a>
-                <a href="https://twitter.com/kenlee308" class="text-slate-400 hover:text-white">X / Twitter</a>
-            </div>
-            <a href="mailto:apsis.g9@gmail.com"
-                class="inline-block bg-indigo-600 text-white px-8 py-4 rounded-full font-bold hover:bg-indigo-500 transition-colors">
-                Let's Build the Future
-            </a>
-        </footer>
-
+    <main class="max-w-4xl mx-auto px-6 pt-32 pb-16">
+        <div class="flex flex-col md:flex-row items-center gap-8 mb-12">
+            <img src="assets/images/kenny.jpg" alt="Kenny Lee" class="w-40 h-40 rounded-full border-2 border-white/10 object-cover">
+            <div><h1 class="text-4xl md:text-5xl font-bold glow">Kenny Lee</h1><p class="text-slate-300 mt-3 text-lg">Applied physicist and PM who orchestrates AI agents to build real products, from industrial drives to robotics | Founder, Apsis</p></div>
+        </div>
+        <div class="card mb-8 space-y-4">
+            <p>I'm an applied physicist and product manager. What ties my work together now is orchestrating AI agents: I set the goal, break it into pieces, direct the agents doing the work, and check what they produce. It's the same skill as running a product line, applied to a new kind of team.</p>
+            <p>Before that, I spent 10+ years in industrial motors and drives at Techtop and WorldWide Electric. I integrated an acquired generator line that grew about 20% a year, migrated legacy data into our ERP, and built VFD training for sales. I also did on-site technical work in Riyadh with RTS.</p>
+            <p>At an Atlanta law firm, the same approach produced automations that cut bill pay from about a day to minutes.</p>
+            <p>I also build by hand: FPV drones, 3D-printed parts and laser work. Through Apsis, I help teams put practical AI to work. I'm bilingual in Korean and English and open to product, technical and contract work.</p>
+        </div>
+        <div class="card mb-8"><h2 class="text-xl font-semibold mb-3">Background</h2><ul class="space-y-2 list-disc pl-5">
+            <li>B.S. Applied Physics, Georgia State University</li>
+            <li>10+ years in industrial motors and drives (Techtop, WorldWide Electric)</li>
+            <li>On-site technical work in Riyadh with RTS</li>
+            <li>Founder, Apsis Inc.</li>
+            <li>Bilingual: Korean and English</li></ul></div>
+        <div class="text-center">
+            <a href="mailto:apsis.g9@gmail.com" class="inline-block bg-indigo-600 text-white px-8 py-4 rounded-full font-bold hover:bg-indigo-500 transition-colors">apsis.g9@gmail.com</a>
+            <p class="mt-6 space-x-6"><a class="text-slate-400 hover:text-white" href="https://www.linkedin.com/in/kenny-lee-75841319" target="_blank" rel="noopener">LinkedIn</a><a class="text-slate-400 hover:text-white" href="https://github.com/kenlee308" target="_blank" rel="noopener">GitHub</a></p>
+        </div>
     </main>
-
 </body>
-
 </html>
