@@ -172,7 +172,18 @@
         .foot { text-align: center; color: #64748b; font-size: .75rem; letter-spacing: .15em; }
         .orbit-control-btn { bottom: 1rem; right: 1rem; }
 
-        .tagline-m, .mobile-only { display: none; }
+        .tagline-m, .mobile-only { display: block; }
+        .tagline-m { color: #cbd5e1; font-size: .95rem; }
+        .hero .eyebrow, .hero .headline, .hero .subhead, .hero .hint { display: none; }
+        @media (min-width: 768px) {
+            .hero { justify-content: flex-start; padding: 0 2rem 2rem; }
+            .hero-text { max-width: 380px; text-align: left; padding: 1rem 1.25rem; background: rgba(11,13,23,.45); backdrop-filter: blur(3px); }
+            .hero h1 { font-size: 2rem; margin: 0; }
+            .hero-text .hero-btns { justify-content: flex-start; margin-top: .75rem; gap: .5rem; }
+            .hero-text .btn { padding: .45rem .95rem; font-size: .8rem; }
+            #intro-m { max-width: 860px; }
+            #intro-m .headline { font-size: 1.35rem; }
+        }
         html, body { overflow-x: hidden; }
         @media (max-width: 767px) {
             .hero { padding: 0 .75rem 1rem; }
@@ -336,7 +347,6 @@
 
                 // Camera Position
                 this.resetCamera();
-                this.camera.lookAt(0, 0, 0);
 
                 // Lighting
                 const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
@@ -541,7 +551,6 @@
                                 this.isTransitioning = false;
                                 // Reset camera slowly
                                 this.resetCamera();
-                                this.camera.lookAt(0, 0, 0);
                             } else {
                                 window.location.href = config.url;
                             }
@@ -629,8 +638,8 @@
             resetCamera() {
                 const narrow = window.innerWidth / window.innerHeight < 1;
                 const tiny = window.innerWidth < 500;
-                this.camera.position.set(0, tiny ? 1750 : (narrow ? 900 : 500), tiny ? 900 : (narrow ? 1300 : 700));
-                this.camera.lookAt(0, 0, 0);
+                this.camera.position.set(0, tiny ? 1750 : (narrow ? 900 : 580), tiny ? 900 : (narrow ? 1300 : 840));
+                this.camera.lookAt(0, 0, narrow ? 0 : 200);
             }
 
             onResize() {
