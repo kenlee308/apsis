@@ -21,3 +21,11 @@ Plain static HTML, no build step. GitHub Pages serves the `main` branch.
 
 ## Workflow
 Edit on a branch (e.g. `redesign-2026-10`), preview with start.bat, then merge to `main` to publish.
+
+## Planets (index.html, `createPlanets()`)
+10 planets: AI Maze, Blog, Orbit, Parallax, Projects, Tello, About, Rover, Maker, Contact. Each entry: `id, name, short` (mobile label), `url, radius, period, size, color`, optional `ring`, `moons` (decorative), `scroll` (in-page anchor), `target`.
+Start angles are deterministic (`i * 2.65` rad), tuned so labels don't overlap at load from 375px to 1920px. Re-run an overlap check if you add or reorder planets.
+Future grouping: add a `parent: '<id>'` field and render that entry as a moon of the parent instead of its own orbit (not implemented yet).
+
+## Project pages
+orbit.html, parallax.html, tello.html, rover.html, maker.html: short pages, same nav/style, "Demo video coming soon" placeholders.

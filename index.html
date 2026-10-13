@@ -241,17 +241,17 @@
             <div class="grid3">
                 <div class="card"><h3>Technical roles</h3><p>Forward-deployed engineering, product management and hands-on technical work. I bring 10+ years of industrial product experience plus a working method built around AI agents.</p></div>
                 <div class="card"><h3>Partnership consulting</h3><p>The agents do the knowledge work: research, analysis, code, documentation. I do the field work and the people side: site visits, hardware, training and the conversations that make a solution stick.</p></div>
-                <div class="card"><h3>Maker builds</h3><p>FPV drones, 3D-printed parts, laser work, a Wi-Fi camera rover and drone apps. I like problems that have to work in the physical world.</p></div>
+                <div class="card"><h3><a href="maker.html" style="color:inherit;font-size:inherit">Maker builds</a></h3><p>FPV drones, 3D-printed parts, laser work, a Wi-Fi camera rover and drone apps. I like problems that have to work in the physical world.</p><a href="maker.html">Maker builds &rarr;</a></div>
             </div>
         </section>
 
         <section id="projects">
             <h2>Featured projects</h2>
             <div class="grid3">
-                <div class="card"><span class="tag">Platform &middot; private</span><h3>Orbit</h3><p>A local, private data and case-ops platform, starting with law firms. It grew out of real SOP and automation work and replaces scattered spreadsheets and case-management tools.</p><a href="#contact">Demo on request &rarr;</a></div>
-                <div class="card"><span class="tag">Desktop AI</span><h3>Parallax</h3><p>A local AI assistant that reads and fills forms in desktop apps, so repetitive data entry stops being a human job.</p></div>
-                <div class="card"><span class="tag">Android &middot; drone</span><h3>Tello follow-me</h3><p>An Android app that makes a DJI Tello drone follow a person using on-device computer vision.</p><a href="https://github.com/kenlee308/tello-follow" target="_blank" rel="noopener">GitHub &rarr;</a></div>
-                <div class="card"><span class="tag">Hardware &middot; vision</span><h3>Camera rover</h3><p>An ESP32-CAM + Arduino rover that follows people with computer vision. Uno motor brain, ESP32-CAM Wi-Fi bridge, PC-side vision and a custom HTTP/serial protocol, built from scratch.</p></div>
+                <div class="card"><span class="tag">Platform &middot; private</span><h3><a href="orbit.html" style="color:inherit;font-size:inherit">Orbit</a></h3><p>A local, private data and case-ops platform, starting with law firms. It grew out of real SOP and automation work and replaces scattered spreadsheets and case-management tools.</p><a href="#contact">Demo on request &rarr;</a></div>
+                <div class="card"><span class="tag">Desktop AI</span><h3><a href="parallax.html" style="color:inherit;font-size:inherit">Parallax</a></h3><p>A local AI assistant that reads and fills forms in desktop apps, so repetitive data entry stops being a human job.</p></div>
+                <div class="card"><span class="tag">Android &middot; drone</span><h3><a href="tello.html" style="color:inherit;font-size:inherit">Tello follow-me</a></h3><p>An Android app that makes a DJI Tello drone follow a person using on-device computer vision.</p><a href="https://github.com/kenlee308/tello-follow" target="_blank" rel="noopener">GitHub &rarr;</a></div>
+                <div class="card"><span class="tag">Hardware &middot; vision</span><h3><a href="rover.html" style="color:inherit;font-size:inherit">Camera rover</a></h3><p>An ESP32-CAM + Arduino rover that follows people with computer vision. Uno motor brain, ESP32-CAM Wi-Fi bridge, PC-side vision and a custom HTTP/serial protocol, built from scratch.</p></div>
                 <div class="card"><span class="tag">VS Code extension</span><h3>LocalGravity</h3><p>A local-first coding-agent extension that keeps code and data on your own machine.</p><a href="https://github.com/kenlee308/LocalGravity" target="_blank" rel="noopener">GitHub &rarr;</a></div>
                 <div class="card more"><h3>More</h3><p>Earlier experiments (Memochat, Knowledge Base, Ollama IDE) and the AI maze demo live on the projects page.</p><a href="projects.html">All projects &rarr;</a></div>
             </div>
@@ -445,12 +445,19 @@
             }
 
             createPlanets() {
+                // Planet config. Optional: short (mobile label), ring, moons (decorative count),
+                // parent (future: render this entry as a moon of the named planet instead of its own orbit).
                 const data = [
-                    { name: 'AI Maze Navigator', short: 'AI Maze', url: 'Javascript Maze Game.html', radius: 150, period: 20, size: 8, color: 0x0ea5e9, target: '_blank' },
-                    { name: 'Blog', url: 'https://medium.com/@apsis.g9', radius: 250, period: 35, size: 12, color: 0xec4899, target: '_blank' },
-                    { name: 'Projects', url: 'projects.html', radius: 360, period: 75, size: 28, color: 0xa855f7, isNew: true },
-                    { name: 'The Founder', short: 'About', url: 'aboutme.html', radius: 480, period: 50, size: 22, color: 0x4f46e5 },
-                    { name: 'Contact', url: '#contact', radius: 600, period: 140, size: 25, color: 0x312e81, scroll: true }
+                    { id: 'maze', name: 'AI Maze Navigator', short: 'AI Maze', url: 'Javascript Maze Game.html', radius: 110, period: 20, size: 7, color: 0x0ea5e9, target: '_blank' },
+                    { id: 'blog', name: 'Blog', url: 'https://medium.com/@apsis.g9', radius: 175, period: 35, size: 10, color: 0xec4899, target: '_blank' },
+                    { id: 'orbit', name: 'Orbit', url: 'orbit.html', radius: 240, period: 45, size: 18, color: 0x22d3ee, ring: true },
+                    { id: 'parallax', name: 'Parallax', url: 'parallax.html', radius: 305, period: 55, size: 14, color: 0x34d399, moons: 1 },
+                    { id: 'projects', name: 'Projects', url: 'projects.html', radius: 370, period: 75, size: 26, color: 0xa855f7, isNew: true },
+                    { id: 'tello', name: 'Tello Follow-Me', short: 'Tello', url: 'tello.html', radius: 435, period: 65, size: 12, color: 0xf8fafc, moons: 2 },
+                    { id: 'about', name: 'The Founder', short: 'About', url: 'aboutme.html', radius: 500, period: 50, size: 20, color: 0x4f46e5 },
+                    { id: 'rover', name: 'Camera Rover', short: 'Rover', url: 'rover.html', radius: 565, period: 90, size: 16, color: 0xef4444 },
+                    { id: 'maker', name: 'Maker Builds', short: 'Maker', url: 'maker.html', radius: 630, period: 110, size: 18, color: 0xf97316, ring: true },
+                    { id: 'contact', name: 'Contact', url: '#contact', radius: 695, period: 140, size: 22, color: 0x312e81, scroll: true }
                 ];
 
                 data.forEach((p, i) => {
@@ -462,6 +469,19 @@
                         emissiveIntensity: 0.15
                     });
                     const mesh = new THREE.Mesh(geometry, material);
+                    if (p.ring) {
+                        const ring = new THREE.Mesh(new THREE.RingGeometry(p.size * 1.4, p.size * 2.1, 48),
+                            new THREE.MeshBasicMaterial({ color: p.color, side: THREE.DoubleSide, transparent: true, opacity: 0.45 }));
+                        ring.rotation.x = Math.PI / 2.4;
+                        mesh.add(ring);
+                    }
+                    for (let m = 0; m < (p.moons || 0); m++) {
+                        const moon = new THREE.Mesh(new THREE.SphereGeometry(Math.max(2.5, p.size * 0.25), 16, 16),
+                            new THREE.MeshStandardMaterial({ color: 0xcbd5e1, emissive: 0x94a3b8, emissiveIntensity: 0.2 }));
+                        const a = m * Math.PI;
+                        moon.position.set(Math.cos(a) * p.size * 2, 0, Math.sin(a) * p.size * 2);
+                        mesh.add(moon);
+                    }
 
                     const group = new THREE.Group();
                     group.add(mesh);
@@ -488,10 +508,10 @@
                     };
 
                     const label = new CSS2DObject(labelDiv);
-                    label.position.set(p.size + 15, p.size + 15, 0);
+                    label.position.set(0, p.size + 14, 0);
                     mesh.add(label);
 
-                    this.planets.push({ mesh, group, orbit, config: p, angle: i * 2.4 + Math.random() * 0.4, label });
+                    this.planets.push({ mesh, group, orbit, config: p, angle: i * 2.65, label });
                 });
             }
 
@@ -638,7 +658,8 @@
             resetCamera() {
                 const narrow = window.innerWidth / window.innerHeight < 1;
                 const tiny = window.innerWidth < 500;
-                this.camera.position.set(0, tiny ? 1750 : (narrow ? 900 : 580), tiny ? 900 : (narrow ? 1300 : 840));
+                const k = tiny ? Math.min(1, 0.4625 / (window.innerWidth / window.innerHeight)) : 1;
+                this.camera.position.set(0, (tiny ? 2050 : (narrow ? 1050 : 660)) * k, (tiny ? 1050 : (narrow ? 1500 : 950)) * k);
                 this.camera.lookAt(0, 0, narrow ? 0 : 200);
             }
 
