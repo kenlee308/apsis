@@ -144,7 +144,7 @@
 
         #canvas-container { position: fixed !important; }
         .planet-label { font-size: 13px; color: #cbd5e1; padding: 4px 10px; border-radius: 9999px; background: rgba(15,23,42,.55); border: 1px solid rgba(255,255,255,.12); }
-        @media (max-width: 768px) { .planet-label { font-size: 12px; padding: 8px 12px; } }
+        @media (max-width: 768px) { .planet-label { font-size: 12px; padding: 6px 10px; } .planet-label.highlight::after { display: none; } }
         .hero { position: relative; z-index: 10; min-height: 100vh; display: flex; align-items: flex-end; justify-content: center; padding: 0 1.25rem 6rem; pointer-events: none; }
         .hero-text { max-width: 760px; text-align: center; background: rgba(11,13,23,.55); backdrop-filter: blur(6px); border: 1px solid var(--glass-border); border-radius: 1.25rem; padding: 1.5rem 1.75rem; }
         .hero-text a { pointer-events: auto; }
@@ -171,6 +171,21 @@
         .tag { display: inline-block; font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: #c4b5fd; margin-bottom: .5rem; }
         .foot { text-align: center; color: #64748b; font-size: .75rem; letter-spacing: .15em; }
         .orbit-control-btn { bottom: 1rem; right: 1rem; }
+
+        .tagline-m, .mobile-only { display: none; }
+        html, body { overflow-x: hidden; }
+        @media (max-width: 767px) {
+            .hero { padding: 0 .75rem 1rem; }
+            .hero-text { padding: .7rem 1rem; background: rgba(11,13,23,.45); backdrop-filter: blur(3px); border-radius: .9rem; width: 100%; }
+            .hero .eyebrow, .hero .headline, .hero .subhead, .hero .hint, .hero-text .btn:nth-child(3) { display: none; }
+            .hero h1 { font-size: 1.6rem; margin: 0; }
+            .tagline-m { display: block; color: #cbd5e1; font-size: .85rem; }
+            .hero-text .hero-btns { margin-top: .6rem; gap: .5rem; }
+            .hero-text .btn { padding: .45rem .9rem; font-size: .8rem; }
+            .mobile-only { display: block; }
+            .content { padding-top: 2rem; }
+            .orbit-control-btn { position: absolute; bottom: auto; top: 5rem; right: .75rem; padding: .4rem .8rem; font-size: .7rem; }
+        }
     </style>
     <script src="shared.js" defer></script>
 </head>
@@ -192,6 +207,7 @@
         <div class="hero-text">
             <p class="eyebrow">Kenny Lee &middot; Apsis Inc.</p>
             <h1 class="glow">Kenny Lee</h1>
+            <p class="tagline-m">Physicist &middot; PM &middot; AI-agent orchestrator</p>
             <p class="headline">Applied physicist and PM who orchestrates AI agents to build real products, from industrial drives to robotics | Founder, Apsis</p>
             <p class="subhead">I set the goal, direct a team of AI agents, and handle the hardware, the field work and the people side myself.</p>
             <div class="hero-btns">
@@ -204,6 +220,11 @@
     </header>
 
     <main class="content">
+        <section id="intro-m" class="mobile-only">
+            <p class="headline">Applied physicist and PM who orchestrates AI agents to build real products, from industrial drives to robotics | Founder, Apsis</p>
+            <p class="subhead">I set the goal, direct a team of AI agents, and handle the hardware, the field work and the people side myself.</p>
+            <div class="hero-btns" style="justify-content:flex-start"><a class="btn" href="https://www.linkedin.com/in/kenny-lee-75841319" target="_blank" rel="noopener">LinkedIn</a></div>
+        </section>
         <section id="what">
             <h2>What I do</h2>
             <div class="grid3">
@@ -282,7 +303,7 @@
                 this.canvas = document.getElementById('solar-canvas');
                 this.container = document.getElementById('canvas-container');
                 this.scene = new THREE.Scene();
-                this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+                this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 5000);
 
                 this.renderer = new THREE.WebGLRenderer({
                     canvas: this.canvas,
@@ -415,14 +436,14 @@
 
             createPlanets() {
                 const data = [
-                    { name: 'AI Maze Navigator', url: 'Javascript Maze Game.html', radius: 150, period: 20, size: 8, color: 0x0ea5e9, target: '_blank' },
+                    { name: 'AI Maze Navigator', short: 'AI Maze', url: 'Javascript Maze Game.html', radius: 150, period: 20, size: 8, color: 0x0ea5e9, target: '_blank' },
                     { name: 'Blog', url: 'https://medium.com/@apsis.g9', radius: 250, period: 35, size: 12, color: 0xec4899, target: '_blank' },
                     { name: 'Projects', url: 'projects.html', radius: 360, period: 75, size: 28, color: 0xa855f7, isNew: true },
-                    { name: 'The Founder', url: 'aboutme.html', radius: 480, period: 50, size: 22, color: 0x4f46e5 },
+                    { name: 'The Founder', short: 'About', url: 'aboutme.html', radius: 480, period: 50, size: 22, color: 0x4f46e5 },
                     { name: 'Contact', url: '#contact', radius: 600, period: 140, size: 25, color: 0x312e81, scroll: true }
                 ];
 
-                data.forEach(p => {
+                data.forEach((p, i) => {
                     const geometry = new THREE.SphereGeometry(p.size, 32, 32);
                     const material = new THREE.MeshStandardMaterial({
                         color: p.color,
@@ -448,7 +469,7 @@
                     // Label (CSS2D)
                     const labelDiv = document.createElement('div');
                     labelDiv.className = `planet-label ${p.isNew ? 'highlight' : ''}`;
-                    labelDiv.textContent = p.name;
+                    labelDiv.textContent = (window.innerWidth < 768 && p.short) ? p.short : p.name;
                     labelDiv.style.pointerEvents = 'auto';
                     labelDiv.style.cursor = 'pointer';
                     labelDiv.onclick = (e) => {
@@ -460,7 +481,7 @@
                     label.position.set(p.size + 15, p.size + 15, 0);
                     mesh.add(label);
 
-                    this.planets.push({ mesh, group, orbit, config: p, angle: Math.random() * Math.PI * 2, label });
+                    this.planets.push({ mesh, group, orbit, config: p, angle: i * 2.4 + Math.random() * 0.4, label });
                 });
             }
 
@@ -607,7 +628,8 @@
 
             resetCamera() {
                 const narrow = window.innerWidth / window.innerHeight < 1;
-                this.camera.position.set(0, narrow ? 900 : 500, narrow ? 1300 : 700);
+                const tiny = window.innerWidth < 500;
+                this.camera.position.set(0, tiny ? 1750 : (narrow ? 900 : 500), tiny ? 900 : (narrow ? 1300 : 700));
                 this.camera.lookAt(0, 0, 0);
             }
 
