@@ -377,6 +377,25 @@
 
                 // Controls
                 this.initControls();
+
+                // bfcache: Back/Forward restores the page frozen mid-zoom; reset the scene
+                window.addEventListener('pageshow', (e) => { if (e.persisted) this.resetScene(); });
+                window.addEventListener('pagehide', () => { if (this.isTransitioning) this.resetScene(); });
+            }
+
+            resetScene() {
+                this.isTransitioning = false;
+                this.isPaused = false;
+                this.timeMultiplier = 1;
+                this.lastTime = performance.now();
+                this.cameraTarget.set(0, 0, 0);
+                if (this.hoveredPlanet) this.hoveredPlanet.mesh.scale.set(1, 1, 1);
+                this.hoveredPlanet = null;
+                document.body.style.cursor = 'default';
+                document.getElementById('pause-icon').classList.remove('hidden');
+                document.getElementById('play-icon').classList.add('hidden');
+                document.getElementById('orbit-toggle').querySelector('span').textContent = 'Pause Orbits';
+                this.resetCamera();
             }
 
             createStarfield() {
