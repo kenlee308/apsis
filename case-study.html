@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running a multi-agent AI team with human approval gates | Kenny Lee, Apsis</title>
+    <meta name="description" content="Case study: three weeks of a file-based operating system for a team of AI agents at Apsis, with human approval gates, one owner per task, an independent reviewer and monitor, and outcomes measured per lane.">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Running a multi-agent AI team with human approval gates | Kenny Lee, Apsis">
+    <meta property="og:description" content="Case study: three weeks of a file-based operating system for a team of AI agents at Apsis, with human approval gates, one owner per task, an independent reviewer and monitor, and outcomes measured per lane.">
+    <meta property="og:url" content="https://kenlee308.github.io/apsis/case-study.html">
+    <meta property="og:image" content="https://kenlee308.github.io/apsis/assets/images/Apsis_2025_screenshot.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #0b0d17; color: #fff; }
+        .glow { text-shadow: 0 0 10px rgba(99,102,241,.5), 0 0 20px rgba(99,102,241,.3); }
+        .card { border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.04); border-radius: 1rem; padding: 1.5rem; }
+        .card p, .card li { color: #cbd5e1; line-height: 1.6; }
+        .card a { color: #a5b4fc; font-weight: 600; font-size: .9rem; }
+        .tag { font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: #c4b5fd; }
+        summary { cursor: pointer; }
+        .article p, .article li { color: #cbd5e1; line-height: 1.7; }
+        .article strong { color: #fff; font-weight: 600; }
+        .article a { color: #a5b4fc; font-weight: 500; font-size: inherit; text-decoration: underline; text-underline-offset: 2px; }
+        .article a:hover { color: #fff; }
+        .article table { border-collapse: collapse; }
+        .article th, .article td { border: 1px solid rgba(255,255,255,.1); padding: .5rem .75rem; text-align: left; vertical-align: top; color: #cbd5e1; }
+        .article th { background: rgba(255,255,255,.06); color: #fff; font-weight: 600; }
+        .article .sources p, .article .sources li { color: #94a3b8; }
+    </style>
+    <script src="shared.js" defer></script>
+</head>
+<body>
+    <apsis-nav></apsis-nav>
+    <main class="max-w-3xl mx-auto px-6 pt-32 pb-16">
+        <p class="mb-6"><a class="text-slate-400 hover:text-white text-sm" href="projects.html">&larr; All projects</a></p>
+        <p class="tag">Write-up &middot; Oct 2026</p>
+        <h1 class="text-3xl md:text-4xl font-bold glow mt-2 mb-4">Running a multi-agent AI team with human approval gates: three weeks of an operating system for Apsis</h1>
+        <p class="text-slate-400 mb-10"><strong>Kenny Lee</strong> · Founder / Owner, Apsis (consulting &amp; R&amp;D) · B.S. Applied Physics, Georgia State University · 12+ years in motors/drives, 10+ as a PM</p>
+        <article class="article card">
+<h2 class="text-2xl font-semibold mt-12 mb-4">TL;DR</h2>
+<p class="mb-4">I installed Grok Bot on Sep 24, 2026 (calendar). By mid-October I had set up an operating system for a team of AI agents that works across Apsis: software prototypes, robot and drone benches, business-direction research, back-office ops, and income work, including a job search. v2 of this write-up covered its first two days. Three weeks later (snapshot Oct 30, 2026) the team is 16 working agents plus one independent Monitor. What held up, what didn't:</p>
+<ul class="list-disc pl-5 space-y-2 mb-4">
+<li><strong>The approval gates held across every lane.</strong> Agents research, draft, build and keep the books. Sending as me, applying, spending, deleting outside the box, public posts and government filings still wait for my explicit OK.</li>
+<li><strong>It runs several projects at once, under one set of rules.</strong> The same task board, decisions ledger, file caps and Reviewer cover Orbit (a local data-OS prototype), the AI Rover and TelloFollow hardware benches, strategy research, Apsis ops and the job lane.</li>
+<li><strong>Decisions reaching me stayed low:</strong> 4, 1 and 1 on Oct 28–30, inside my target of 10 a week.</li>
+<li><strong>I track time and efficiency, not attention categories.</strong> About 17 hours with the agents in the week of Oct 26–30, from Grok/Agent-tagged blocks on my work calendar (a proxy: usually close, sometimes padded or short). Hours are the cost; efficiency is outcomes per those hours.</li>
+<li><strong>Each lane gets its own outcomes.</strong> On Oct 29 the job lane's scoreboard moved from activity to applications, replies and interviews. Prototypes and research are judged on what actually moved, under the same gates.</li>
+</ul>
+<h2 class="text-2xl font-semibold mt-12 mb-4">What the first two weeks were for</h2>
+<p class="mb-4">Most of the early work wasn't about a job search.</p>
+<ul class="list-disc pl-5 space-y-2 mb-4">
+<li><strong>Agent setup and knowledge transfer.</strong> I stood up named agents, one per project or function, and loaded them with my equipment, past builds, profile facts and working preferences, so they stopped asking me the same things.</li>
+<li><strong>Orbit.</strong> A local web app (Next.js/TypeScript, SQLite, local models through Ollama) that maps raw tables to an ontology so small local LLMs can run workflows: a "mini Palantir." Its first vertical is a law-firm toy domain on fake data. The point is a reusable data-OS, not a legal product.</li>
+<li><strong>Hardware benches.</strong> The AI Rover (Arduino plus ESP32-CAM, person-follow) and TelloFollow (an Android/Kotlin app for the DJI Tello, with voice commands in progress). Agents prepare firmware, code and test plans; the bench steps (wiring, flashing, ground tests) wait for me, usually on weekends. Honestly, that is where these projects most often sit.</li>
+<li><strong>Business direction.</strong> Agents researched income and product directions. Some were parked, including "alive objects" and a premium desktop line. On Oct 19 I set the near-term direction: robot reliability plus narrow integration tools (remote diagnosis, guided repair, an uptime layer, one adapter to a legacy machine). Familiar is a possible component.</li>
+<li><strong>Orchestration itself.</strong> Local Swarm Lab ran cheap multi-agent experiments on my 6 GB GPU laptop; Remote AI Operator works on AI control of a locked-down PC. The file-based operating system holding it together was a project in its own right.</li>
+</ul>
+<p class="mb-4">The job search ran in parallel as an income lane and a showcase. It is one of my top current focuses now &mdash; not the origin story of the system.</p>
+<h2 class="text-2xl font-semibold mt-12 mb-4">How the team is organized now</h2>
+<p class="mb-4"><strong>One point of contact.</strong> Every agent reports only to my orchestrator agent (the Guide). URGENT items (money, security, legal, due within hours) can reach me directly; DECIDE items go to the Guide with a recommendation and a default, at most three per daily brief; FYI never reaches me.</p>
+<p class="mb-4"><strong>Delegated authority, written down.</strong> Agents don't ask before research, drafting, internal file edits, fixing their own tooling, or shelving internal tasks. If a step is reversible and free and I haven't answered in 24 hours, the agent announces "I'll do X unless you say stop" and goes ahead. Everything outside that list needs me.</p>
+<p class="mb-4"><strong>State lives in files, not in chat.</strong> The core set:</p>
+<ul class="list-disc pl-5 space-y-2 mb-4">
+<li>a <strong>task board</strong>, one owner per task across all projects, with a schema the librarian agent checks every morning (on Oct 30 it returned two rows to their owner for an invalid status value);</li>
+<li>a <strong>decisions ledger</strong>, append-only. Since Oct 28 every new line records a confidence level and a "wrong if" condition, borrowed from architecture-decision-record practice, so a later agent can tell when a decision has expired;</li>
+<li>a <strong>blackboard</strong> for agent-to-agent FYI, a <strong>waiting-on-me list</strong> with a due date and default for every open decision, and a <strong>private phone dashboard</strong> rebuilt from those files after a redaction scan.</li>
+</ul>
+<p class="mb-4"><strong>Size limits and an archive.</strong> By week two agents were spending tokens rereading old content. On Oct 22 every core file got a "current state" block on top and a size cap (8–18 KB). Overflow moves to an archive verbatim with an index line. Nothing is deleted, and only two agents read the archive.</p>
+<p class="mb-4"><strong>An independent Monitor.</strong> On Oct 30 I locked in an agent whose only job is assessment: it compares what the team is doing against my current top three priorities and looks for blind spots and drift. It reports to me directly, owns no tasks, and refuses build work, so it has no stake in what it judges.</p>
+<p class="mb-4"><strong>Each agent owns its own lessons.</strong> A daily news scan routes items to the agents they affect; each agent writes its own lessons, with evidence. The orchestrator doesn't write them for others.</p>
+<h2 class="text-2xl font-semibold mt-12 mb-4">The gates, in practice</h2>
+<ul class="list-disc pl-5 space-y-2 mb-4">
+<li><strong>Outbound work.</strong> Anything under my name (a job packet, an outreach email, a site update) goes through the Reviewer, then waits for my yes. Early rules let agents skip an unanswered job packet by default; on Oct 29 I made skipping my call, and open questions to employers now get a dated cutoff instead of an open-ended hold.</li>
+<li><strong>One fact sheet.</strong> On Oct 29 I locked titles, dates and wording for everything outbound. Unsubmitted packets flipped to NOT READY until regenerated against it.</li>
+<li><strong>Hardware and machines.</strong> Agents prepare firmware and test plans, but flashing, wiring and flight tests are mine. On my laptop, one agent may apply low-risk, reversible package bumps after a rollback check; anything major still comes to me.</li>
+<li><strong>Reviewer before anything leaves.</strong> Nothing goes out under my name without an independent check against a scored rubric. v1 and v2 of this case study were each returned at least once (27 findings across the two).</li>
+<li><strong>Security.</strong> Every push is scanned for secrets first; the dashboard republishes only after a privacy check passes.</li>
+</ul>
+<h2 class="text-2xl font-semibold mt-12 mb-4">Lane scoreboard: the job lane (Oct 13–30)</h2>
+<p class="mb-4">The job lane is the easiest to count, so it has the cleanest numbers. It is one lane, not the whole system.</p>
+<div class="overflow-x-auto mb-6"><table class="w-full text-sm">
+<thead>
+<tr>
+<th>Measure</th>
+<th>Value</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Applications submitted</td>
+<td>9</td>
+<td>One ledger line per submission (incl. Ditto MaintainOps Oct 30)</td>
+</tr>
+<tr>
+<td>Interviews</td>
+<td>Capgemini screen passed; L1 booked Nov 16</td>
+<td>Interview columns added Oct 29</td>
+</tr>
+<tr>
+<td>Holds</td>
+<td>Augury, Zapier</td>
+<td>Pre-apply questions out; skip Nov 7 if no answer</td>
+</tr>
+<tr>
+<td>Replies</td>
+<td>Mostly unknown</td>
+<td>No mail pipeline yet; filled by hand when checked</td>
+</tr>
+</tbody>
+</table></div>
+<h2 class="text-2xl font-semibold mt-12 mb-4">System numbers</h2>
+<div class="overflow-x-auto mb-6"><table class="w-full text-sm">
+<thead>
+<tr>
+<th>Measure</th>
+<th>Value</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Decisions reaching me</td>
+<td>4 / 1 / 1 (Oct 28–30)</td>
+<td>Unknown before Oct 28; target ≤10/week</td>
+</tr>
+<tr>
+<td>Time with agents</td>
+<td>~17 h, week of Oct 26–30</td>
+<td>Grok/Agent-tagged calendar blocks (proxy); daily minutes go in the metrics file</td>
+</tr>
+<tr>
+<td>Efficiency check</td>
+<td>outcomes ÷ those hours</td>
+<td>A weekly trend, not a fake % vs working solo</td>
+</tr>
+<tr>
+<td>Routine runs</td>
+<td>Not measured</td>
+<td>Frozen Oct 28; no run log exists, and I won't invent one</td>
+</tr>
+</tbody>
+</table></div>
+<p class="mb-4">Two honest notes. On Oct 30 the decisions counter was briefly picking up ledger rows agents had written, not just questions I faced; it now counts only real asks. And counting rules changed on dated days (Oct 22, Oct 28, Oct 30), which the dashboard marks under each chart.</p>
+<h2 class="text-2xl font-semibold mt-12 mb-4">What I learned</h2>
+<ol class="list-decimal pl-5 space-y-2 mb-4">
+<li><strong>Agent count is not output, and each lane needs its own outcomes.</strong> Sixteen agents tells you nothing. For the job lane, output is applications, replies and interviews; for a prototype, it's what got built and tested; for the system overall, it's whether real work moves under the gates without drowning me in decisions.</li>
+<li><strong>Hours are cost; efficiency is outcomes per hour.</strong> Splitting my ~17 hours into "decision load" vs "chosen work" was a dead end. One time input from the calendar plus outcomes lets the weekly review ask whether a heavy week bought progress or churn. No solo baseline, so no invented efficiency percentage.</li>
+<li><strong>Defaults belong to reversible, internal work.</strong> Taking a default on a file rename is fine; taking one on my career or on powering up hardware isn't. The rule now says which is which.</li>
+<li><strong>Shared files need housekeeping.</strong> Size caps, a current-state block on top and an append-at-bottom rule kept the files readable and cheaper to load. Without them, the shared memory became the cost.</li>
+<li><strong>A judge shouldn't also be a worker.</strong> The Monitor owns no tasks for the same reason the Reviewer doesn't draft, and an independent view is what catches drift.</li>
+</ol>
+<h2 class="text-2xl font-semibold mt-12 mb-4">What's next</h2>
+<ul class="list-disc pl-5 space-y-2 mb-4">
+<li>Keep filling daily agent-work minutes from calendar blocks, with outcomes÷hours as a weekly trend line.</li>
+<li>Close the replies gap on the job-lane scoreboard.</li>
+<li>Give the prototype and hardware lanes simple outcome columns of their own.</li>
+</ul>
+<h2 class="text-2xl font-semibold mt-12 mb-4">How this carries over to client deployments</h2>
+<p class="mb-4">A client rollout raises the same questions: who owns each workflow, which actions need a human signature, where state lives, and how you know it's working. Three weeks added two answers to v2's list: <strong>measure outcomes per lane rather than agent activity</strong>, and <strong>measure the human's time with the agents as cost, with efficiency as outcomes per that time</strong>, because that is where a multi-agent system quietly spends most. I'd bring a written approval policy keyed to action risk, one owner per workflow, shared state in capped files with an archive, an independent reviewer and an independent monitor, and a weekly scoreboard. The client sets the gates; the agents work inside them.</p>
+<section class="sources text-sm text-slate-400">
+<h2 class="text-lg font-semibold mt-12 mb-4">Sources</h2>
+<ul class="list-disc pl-5 space-y-2 mb-4">
+<li><a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">Anthropic, "Building effective agents"</a></li>
+<li><a href="https://www.anthropic.com/engineering/multi-agent-research-system" target="_blank" rel="noopener">Anthropic, "How we built our multi-agent research system"</a></li>
+<li><a href="https://cognition.ai/blog/dont-build-multi-agents" target="_blank" rel="noopener">Cognition, "Don't Build Multi-Agents"</a></li>
+<li><a href="https://adrs.systems/" target="_blank" rel="noopener">ADRs4AI</a> (decision-record fields borrowed for the ledger)</li>
+<li>Internal records (redacted, available on request): operating rules, decisions ledger, metrics file, milestones list, work calendar (Grok/Agent blocks as time proxy).</li>
+</ul>
+</section>
+        </article>
+        <p class="mt-8 flex flex-wrap gap-6"><a class="text-indigo-300 font-semibold" href="projects.html">&larr; Projects</a><a class="text-indigo-300 font-semibold" href="index.html#contact">Contact &rarr;</a></p>
+    </main>
+</body>
+</html>
